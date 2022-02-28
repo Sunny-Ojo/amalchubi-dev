@@ -13,13 +13,13 @@ export default [
 				id: 'professionsList',
 				title: 'List',
 				permissions: ['admin', 'editor'],
-				navLink: '/pages/blog/list',
+				navLink: '/professions/list',
 			},
 			{
 				id: 'addNewProfession',
 				title: 'Add New',
 				permissions: ['admin', 'editor'],
-				navLink: '/pages/blog/detail',
+				navLink: '/professions/add',
 			},
 			// {
 			// 	id: 'blogEdit',

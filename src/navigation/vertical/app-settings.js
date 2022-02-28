@@ -5,6 +5,6 @@ export default [
 		id: 'appSettings',
 		title: 'App Settings',
 		icon: <Settings />,
-		navLink: '/apps/email',
+		navLink: '/app-settings',
 	},
 ];
