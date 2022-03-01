@@ -2,7 +2,7 @@
 import { Fragment, useState, useEffect } from 'react';
 
 // ** Invoice List Sidebar
-import Sidebar from './Sidebar';
+// import Sidebar from './Sidebar';
 
 // ** Columns
 import { columns } from './columns';
@@ -85,7 +85,7 @@ const CustomHeader = ({
 						/>
 					</div>
 					<Button.Ripple color="primary" onClick={toggleSidebar}>
-						Add New User
+						Add New Profession
 					</Button.Ripple>
 				</Col>
 			</Row>

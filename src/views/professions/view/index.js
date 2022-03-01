@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 // ** Store & Actions
-import { deleteUser, getUser } from '../store/action';
+import { deleteProfession, getProfession } from '../store/action';
 import { useSelector, useDispatch } from 'react-redux';
 
 // ** Reactstrap
-import { Row, Col, Alert } from 'reactstrap';
+import { Row, Col, Alert, CardBody, Card, CardHeader, Badge } from 'reactstrap';
 
 // ** User View Components
 import PlanCard from './PlanCard';
@@ -19,10 +19,10 @@ import PermissionsTable from './PermissionsTable';
 // ** Styles
 import '@styles/react/apps/app-users.scss';
 
-const UserView = (props) => {
+const ProfessionView = (props) => {
 	// ** Vars
 	const dispatch = useDispatch();
-	const store = useSelector((state) => state.users),
+	const store = useSelector((state) => state.professions),
 		{ id } = useParams();
 
 	const handleDeleteUser = (id) => {
@@ -30,44 +30,49 @@ const UserView = (props) => {
 	};
 	// ** Get suer on mount
 	useEffect(() => {
-		dispatch(getUser(parseInt(id)));
+		dispatch(getProfession(parseInt(id)));
 	}, [dispatch]);
-
-	return store.selectedUser !== null && store.selectedUser !== undefined ? (
+	const statusObj = {
+		pending: 'light-warning',
+		active: 'light-success',
+		inactive: 'light-secondary',
+		blocked: 'light-danger',
+	};
+	return store.selectedProfession !== null &&
+		store.selectedProfession !== undefined ? (
 		<div className="app-user-view">
 			<Row>
-				<Col xl="9" lg="8" md="7">
-					<UserInfoCard
-						selectedUser={store.selectedUser}
-						deleteUser={handleDeleteUser}
-					/>
-				</Col>
-				<Col xl="3" lg="4" md="5">
-					<PlanCard selectedUser={store.selectedUser} />
+				<Col md="12">
+					<Card className="-user-view">
+						<CardHeader>
+							<h2>
+								Profession Details: {store.selectedProfession?.name || '-'}
+							</h2>
+						</CardHeader>
+
+						<CardBody>
+							<h4>
+								Description: {store.selectedProfession?.description || '-'}
+							</h4>
+							Status:
+							<Badge color={statusObj[store.selectedProfession?.status || '']}>
+								{store.selectedProfession?.status || '-'}
+							</Badge>
+						</CardBody>
+					</Card>
 				</Col>
 			</Row>
-			<Row>
-				<Col md="6">
-					<UserTimeline />
-				</Col>
-				<Col md="6">
-					<PermissionsTable />
-				</Col>
-			</Row>
-			{/* <Row>
-				<Col sm="12">
-				<InvoiceList/>
-				</Col>
-			</Row> */}
 		</div>
 	) : (
 		<Alert color="danger">
-			<h4 className="alert-heading">Users not found</h4>
+			{JSON.stringify(store)}
+
+			<h4 className="alert-heading">Profession not found</h4>
 			<div className="alert-body">
-				Users with id: {id} doesn't exist. Check list of all Users:{' '}
-				<Link to="/app/user/list">Users List</Link>
+				Profession with id: {id} doesn't exist. Check list of all Professions:{' '}
+				<Link to="/professions/list">Professions List</Link>
 			</div>
 		</Alert>
 	);
 };
-export default UserView;
+export default ProfessionView;

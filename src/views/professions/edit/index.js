@@ -2,13 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-// ** User Edit Components
-import SocialTab from './Social';
-import AccountTab from './Account';
-import InfoTab from './Information';
-
 // ** Store & Actions
-import { getUser } from '../store/action';
+import { getProfession } from '../store/action';
 import { useSelector, useDispatch } from 'react-redux';
 
 // ** Third Party Components
@@ -24,15 +19,29 @@ import {
 	TabContent,
 	TabPane,
 	Alert,
+	Label,
+	FormGroup,
 } from 'reactstrap';
 
 // ** Styles
 import '@styles/react/apps/app-users.scss';
+import { AvForm, AvInput } from 'availity-reactstrap-validation-safe';
 
-const UserEdit = () => {
+const handleChangeInput = (e) => {
+	const { name, value } = e.target;
+	setProfession({ ...profession, [name]: value });
+};
+const onSubmit = (event, errors) => {
+	if (!errors.length) {
+		console.log(event);
+		// toggleSidebar();
+	}
+	event.preventDefault();
+};
+const ProfessionEdit = () => {
 	// ** States & Vars
 	const [activeTab, setActiveTab] = useState('1'),
-		store = useSelector((state) => state.users),
+		store = useSelector((state) => state.professions),
 		dispatch = useDispatch(),
 		{ id } = useParams();
 
@@ -41,10 +50,16 @@ const UserEdit = () => {
 
 	// ** Function to get user on mount
 	useEffect(() => {
-		dispatch(getUser(parseInt(id)));
+		dispatch(getProfession(parseInt(id)));
 	}, [dispatch]);
+	const [profession, setProfession] = useState({
+		name: store.selectedProfession?.name || '',
+		description: store.selectedProfession?.description || '',
+		status: store.selectedProfession?.status || '',
+	});
 
-	return store.selectedUser !== null && store.selectedUser !== undefined ? (
+	return store.selectedProfession !== null &&
+		store.selectedProfession !== undefined ? (
 		<Row className="app-user-edit">
 			<Col sm="12">
 				<Card>
@@ -54,46 +69,69 @@ const UserEdit = () => {
 								<NavLink active={activeTab === '1'} onClick={() => toggle('1')}>
 									<User size={14} />
 									<span className="align-middle d-none d-sm-block">
-										Profile Details
+										Edit Profession Details
 									</span>
 								</NavLink>
 							</NavItem>
-							{/* <NavItem>
-                <NavLink active={activeTab === '2'} onClick={() => toggle('2')}>
-                  <Info size={14} />
-                  <span className='align-middle d-none d-sm-block'>Information</span>
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink active={activeTab === '3'} onClick={() => toggle('3')}>
-                  <Share2 size={14} />
-                  <span className='align-middle d-none d-sm-block'>Social</span>
-                </NavLink>
-              </NavItem> */}
 						</Nav>
-						<TabContent activeTab={activeTab}>
-							<TabPane tabId="1">
-								<AccountTab selectedUser={store.selectedUser} />
-							</TabPane>
-							<TabPane tabId="2">
-								<InfoTab />
-							</TabPane>
-							<TabPane tabId="3">
-								<SocialTab />
-							</TabPane>
-						</TabContent>
+						<AvForm onSubmit={onSubmit}>
+							<Col md="6">
+								<FormGroup>
+									<Label for="name">Name</Label>
+									<AvInput
+										name="name"
+										id="name"
+										placeholder="Doctor"
+										value={profession.name}
+										onChange={(e) => handleChangeInput(e)}
+										required
+									/>
+								</FormGroup>
+							</Col>
+							<Col md="6">
+								<FormGroup>
+									<Label for="description">Description</Label>
+									<AvInput
+										name="description"
+										id="description"
+										value={profession.description}
+										onChange={(e) => handleChangeInput(e)}
+										placeholder="Australia"
+										required
+									/>
+								</FormGroup>
+							</Col>
+							<Col md="6">
+								<FormGroup>
+									<Label for="status">Status</Label>
+									<AvInput
+										type="select"
+										id="status"
+										name="status"
+										required
+										onChange={(e) => handleChangeInput(e)}
+									>
+										<option value={profession.status}>
+											{profession.status}
+										</option>
+										<option value="false">False</option>
+										<option value="true">True</option>
+									</AvInput>
+								</FormGroup>
+							</Col>
+						</AvForm>
 					</CardBody>
 				</Card>
 			</Col>
 		</Row>
 	) : (
 		<Alert color="danger">
-			<h4 className="alert-heading">Users not found</h4>
+			<h4 className="alert-heading">Profession not found</h4>
 			<div className="alert-body">
-				Users with id: {id} doesn't exist. Check list of all Users:{' '}
-				<Link to="/app/user/list">Users List</Link>
+				Profession with id: {id} doesn't exist. Check list of all Profession:{' '}
+				<Link to="/app/user/list">Profession List</Link>
 			</div>
 		</Alert>
 	);
 };
-export default UserEdit;
+export default ProfessionEdit;

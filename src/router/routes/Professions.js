@@ -5,6 +5,10 @@ const ProfessionsRoutes = [
 		path: '/professions/list',
 		component: lazy(() => import('../../views/professions/list')),
 	},
+	{
+		path: '/professions/add',
+		component: lazy(() => import('../../views/professions/add')),
+	},
 
 	{
 		path: '/professions/edit/:id',

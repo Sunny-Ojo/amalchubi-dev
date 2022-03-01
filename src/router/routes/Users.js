@@ -1,9 +1,13 @@
 import { lazy } from 'react';
 import { Redirect } from 'react-router-dom';
-const AppRoutes = [
+const UserRoutes = [
 	{
 		path: '/users/list',
 		component: lazy(() => import('../../views/users/list')),
+	},
+	{
+		path: '/users/add',
+		component: lazy(() => import('../../views/users/add')),
 	},
 
 	{
@@ -22,4 +26,4 @@ const AppRoutes = [
 		},
 	},
 ];
-export default AppRoutes;
+export default UserRoutes;

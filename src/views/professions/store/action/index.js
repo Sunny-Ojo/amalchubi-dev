@@ -7,12 +7,21 @@ const MySwal = withReactContent(Swal);
 import { swal } from '@utils';
 import axiosClient from '../../../../services/axios';
 // ** Get all Data
+const professions = [
+	{ id: 1, name: 'fvvsd', description: 'gvsdfgffg', status: 'true' },
+	{ id: 2, name: 'fvdvd', description: 'gfgfdfbdregfg', status: 'true' },
+	{ id: 3, name: 'fvfd', description: 'gfgffgvdv', status: 'true' },
+	{ id: 4, name: 'fvsdvsdv', description: 'gfgffg', status: 'true' },
+	{ id: 5, name: 'fvvsd', description: 'gfgfdvfdfg', status: 'true' },
+	{ id: 6, name: 'fvf', description: 'gfgsfdvffg', status: 'false' },
+];
 export const getAllData = () => {
 	return async (dispatch) => {
 		await axios.get('/api/users/list/all-data').then((response) => {
 			dispatch({
 				type: 'GET_ALL_DATA',
-				data: response.data,
+				// data: response.data,
+				data: professions,
 			});
 		});
 	};
@@ -24,7 +33,8 @@ export const getData = (params) => {
 		await axios.get('/api/users/list/data', params).then((response) => {
 			dispatch({
 				type: 'GET_DATA',
-				data: response.data.users,
+				// data: response.data.users,
+				data: professions,
 				totalPages: response.data.total,
 				params,
 			});
@@ -33,14 +43,16 @@ export const getData = (params) => {
 };
 
 // ** Get User
-export const getUser = (id) => {
+export const getProfession = (id) => {
 	return async (dispatch) => {
 		await axios
 			.get('/api/users/user', { id })
 			.then((response) => {
 				dispatch({
-					type: 'GET_USER',
-					selectedUser: response.data.user,
+					type: 'GET_PROFESSION',
+					// selectedProfession: response.data.user,
+					selectedProfession:
+						professions.filter((pro) => pro.id === id)?.[0] || [],
 				});
 			})
 			.catch((err) => console.log(err));
@@ -48,7 +60,7 @@ export const getUser = (id) => {
 };
 
 // ** Delete User
-export const deleteUser = (id) => {
+export const deleteProfession = (id) => {
 	return async () => {
 		await MySwal.fire({
 			title: 'Are you sure?',

@@ -1,6 +1,7 @@
 // ** React Imports
 import { Fragment, useState, useEffect } from 'react';
 
+import { Link } from 'react-router-dom';
 // ** Invoice List Sidebar
 import Sidebar from './Sidebar';
 
@@ -84,9 +85,9 @@ const CustomHeader = ({
 							onChange={(e) => handleFilter(e.target.value)}
 						/>
 					</div>
-					<Button.Ripple color="primary" onClick={toggleSidebar}>
-						Add New User
-					</Button.Ripple>
+					<Link to="/users/add">
+						<Button.Ripple color="primary">Add New User</Button.Ripple>
+					</Link>
 				</Col>
 			</Row>
 		</div>
@@ -318,7 +319,7 @@ const UsersList = () => {
 				/>
 			</Card>
 
-			{/* <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} /> */}
+			<Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
 		</Fragment>
 	);
 };

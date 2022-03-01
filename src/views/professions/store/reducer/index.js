@@ -4,10 +4,10 @@ const initialState = {
 	data: [],
 	total: 1,
 	params: {},
-	selectedUser: null,
+	selectedProfession: null,
 };
 
-const users = (state = initialState, action) => {
+const professions = (state = initialState, action) => {
 	switch (action.type) {
 		case 'GET_ALL_DATA':
 			return { ...state, allData: action.data };
@@ -18,11 +18,11 @@ const users = (state = initialState, action) => {
 				total: action.totalPages,
 				params: action.params,
 			};
-		case 'GET_USER':
-			return { ...state, selectedUser: action.selectedUser };
+		case 'GET_PROFESSION':
+			return { ...state, selectedProfession: action.selectedProfession };
 
 		default:
 			return { ...state };
 	}
 };
-export default users;
+export default professions;
