@@ -9,7 +9,7 @@ import withReactContent from 'sweetalert2-react-content';
 const MySwal = withReactContent(Swal);
 
 // ** Store & Actions
-import { getUser } from '../store/action';
+import { getBlog } from '../store/action';
 import { store } from '@store/storeConfig/store';
 
 // ** Third Party Components
@@ -31,6 +31,7 @@ import {
 	Trash2,
 	Archive,
 } from 'react-feather';
+// import { get } from 'sortablejs';
 
 // ** Renders Client Columns
 const renderClient = (row) => {
@@ -45,7 +46,7 @@ const renderClient = (row) => {
 		],
 		color = states[stateNum];
 
-	if (row?.avatar?.length) {
+	if (row.avatar.length) {
 		return <Avatar className="mr-1" img={row.avatar} width="32" height="32" />;
 	} else {
 		return (
@@ -98,12 +99,10 @@ const renderRole = (row) => {
 };
 
 const statusObj = {
-	pending: 'light-warning',
-	active: 'light-success',
-	inactive: 'light-secondary',
-	blocked: 'light-danger',
+	true: 'light-success',
+	false: 'light-danger',
 };
-const handleDeleteUser = (id) => {
+const handleDeleteBlog = (id) => {
 	return async () => {
 		await MySwal.fire({
 			title: 'Are you sure?',
@@ -145,58 +144,32 @@ const handleDeleteUser = (id) => {
 // [suspended, blocked, active, inactive] for status(filter for this)
 export const columns = [
 	{
-		name: 'User',
-		minWidth: '297px',
-		selector: 'fullName',
-		sortable: true,
-		cell: (row) => (
-			<div className="d-flex justify-content-left align-items-center">
-				{renderClient(row)}
-				<div className="d-flex flex-column">
-					<Link
-						to={`/apps/user/view/${row.id}`}
-						className="user-name text-truncate mb-0"
-						onClick={() => store.dispatch(getUser(row.id))}
-					>
-						<span className="font-weight-bold">{row.fullName}</span>
-					</Link>
-					<small className="text-truncate text-muted mb-0">
-						@{row.username}
-					</small>
-				</div>
-			</div>
-		),
-	},
-	{
-		name: 'Email',
+		name: 'ID',
 		minWidth: '320px',
-		selector: 'email',
+		selector: 'id',
 		sortable: true,
-		cell: (row) => row.email,
+		cell: (row) => row.id || 'ID',
 	},
 	{
-		name: 'Role',
-		minWidth: '172px',
-		selector: 'role',
+		name: 'Title',
+		minWidth: '320px',
+		selector: 'title',
 		sortable: true,
-		cell: (row) => renderRole(row),
+		cell: (row) => row.title || 'Blog title',
 	},
+	// {
+	// 	name: 'Content',
+	// 	minWidth: '172px',
+	// 	selector: 'content',
+	// 	sortable: true,
+	// 	cell: (row) =>
+	// 		`${
+	// 			(row.content &&
+	// 				row.content.split(' ').splice(0, 12).join(' ') + '...') ||
+	// 			'content'
+	// 		}`,
+	// },
 
-	{
-		name: 'Royal Title',
-		minWidth: '138px',
-		selector: 'status',
-		sortable: true,
-		cell: (row) => (
-			<Badge
-				className="text-capitalize"
-				color={statusObj[row?.royal_title || '-']}
-				pill
-			>
-				{row?.status || '-'}
-			</Badge>
-		),
-	},
 	{
 		name: 'Actions',
 		minWidth: '100px',
@@ -210,23 +183,23 @@ export const columns = [
 				<DropdownMenu right>
 					<DropdownItem
 						tag={Link}
-						to={`/users/view/${row.id}`}
+						to={`/blogs/view/${row.id}`}
 						className="w-100"
-						onClick={() => store.dispatch(getUser(row.id))}
+						onClick={() => store.dispatch(getBlog(row.id))}
 					>
 						<FileText size={14} className="mr-50" />
 						<span className="align-middle">Details</span>
 					</DropdownItem>
 					<DropdownItem
 						tag={Link}
-						to={`/users/edit/${row.id}`}
+						to={`/blogs/edit/${row.id}`}
 						className="w-100"
-						onClick={() => store.dispatch(getUser(row.id))}
+						onClick={() => store.dispatch(getBlog(row.id))}
 					>
 						<Archive size={14} className="mr-50" />
 						<span className="align-middle">Edit</span>
 					</DropdownItem>
-					<DropdownItem className="w-100" onClick={handleDeleteUser(row.id)}>
+					<DropdownItem className="w-100" onClick={handleDeleteBlog(row.id)}>
 						<Trash2 size={14} className="mr-50" />
 						<span className="align-middle">Delete</span>
 					</DropdownItem>

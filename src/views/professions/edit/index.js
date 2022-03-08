@@ -1,13 +1,13 @@
 // ** React Imports
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 
 // ** Store & Actions
 import { getProfession } from '../store/action';
 import { useSelector, useDispatch } from 'react-redux';
 
 // ** Third Party Components
-import { User, Info, Share2 } from 'react-feather';
+import { User } from 'react-feather';
 import {
 	Card,
 	CardBody,
@@ -16,48 +16,58 @@ import {
 	Nav,
 	NavItem,
 	NavLink,
-	TabContent,
-	TabPane,
 	Alert,
 	Label,
 	FormGroup,
+	Button,
 } from 'reactstrap';
 
+import { swal } from '../../../utility/Utils';
 // ** Styles
 import '@styles/react/apps/app-users.scss';
 import { AvForm, AvInput } from 'availity-reactstrap-validation-safe';
 
-const handleChangeInput = (e) => {
-	const { name, value } = e.target;
-	setProfession({ ...profession, [name]: value });
-};
-const onSubmit = (event, errors) => {
-	if (!errors.length) {
-		console.log(event);
-		// toggleSidebar();
-	}
-	event.preventDefault();
-};
 const ProfessionEdit = () => {
+	const history = useHistory();
 	// ** States & Vars
 	const [activeTab, setActiveTab] = useState('1'),
 		store = useSelector((state) => state.professions),
 		dispatch = useDispatch(),
 		{ id } = useParams();
 
-	// ** Function to toggle tabs
+	const [profession, setProfession] = useState({
+		name: store.selectedProfession?.name || '',
+		description: store.selectedProfession?.description || '',
+		status: store.selectedProfession?.status || '',
+	});
+	const handleChangeInput = (e) => {
+		const { name, value } = e.target;
+		setProfession({ ...profession, [name]: value });
+	}; // ** Function to toggle tabs
 	const toggle = (tab) => setActiveTab(tab);
 
 	// ** Function to get user on mount
 	useEffect(() => {
 		dispatch(getProfession(parseInt(id)));
 	}, [dispatch]);
-	const [profession, setProfession] = useState({
-		name: store.selectedProfession?.name || '',
-		description: store.selectedProfession?.description || '',
-		status: store.selectedProfession?.status || '',
-	});
-
+	const onSubmit = (event, errors) => {
+		if (!errors.length) {
+			swal(
+				'Successfully updated',
+				'Profession details has been updated successfully',
+				'success'
+			);
+			console.log(profession);
+			history.push('/professions/list');
+		} else {
+			event.preventDefault();
+			swal(
+				'Error',
+				'Validation failed, please check the form and fill all fields correctly',
+				'error'
+			);
+		}
+	};
 	return store.selectedProfession !== null &&
 		store.selectedProfession !== undefined ? (
 		<Row className="app-user-edit">
@@ -67,7 +77,6 @@ const ProfessionEdit = () => {
 						<Nav pills>
 							<NavItem>
 								<NavLink active={activeTab === '1'} onClick={() => toggle('1')}>
-									<User size={14} />
 									<span className="align-middle d-none d-sm-block">
 										Edit Profession Details
 									</span>
@@ -75,50 +84,58 @@ const ProfessionEdit = () => {
 							</NavItem>
 						</Nav>
 						<AvForm onSubmit={onSubmit}>
-							<Col md="6">
-								<FormGroup>
-									<Label for="name">Name</Label>
-									<AvInput
-										name="name"
-										id="name"
-										placeholder="Doctor"
-										value={profession.name}
-										onChange={(e) => handleChangeInput(e)}
-										required
-									/>
-								</FormGroup>
-							</Col>
-							<Col md="6">
-								<FormGroup>
-									<Label for="description">Description</Label>
-									<AvInput
-										name="description"
-										id="description"
-										value={profession.description}
-										onChange={(e) => handleChangeInput(e)}
-										placeholder="Australia"
-										required
-									/>
-								</FormGroup>
-							</Col>
-							<Col md="6">
-								<FormGroup>
-									<Label for="status">Status</Label>
-									<AvInput
-										type="select"
-										id="status"
-										name="status"
-										required
-										onChange={(e) => handleChangeInput(e)}
-									>
-										<option value={profession.status}>
-											{profession.status}
-										</option>
-										<option value="false">False</option>
-										<option value="true">True</option>
-									</AvInput>
-								</FormGroup>
-							</Col>
+							<Row>
+								<Col md="6">
+									<FormGroup>
+										<Label for="name">Name</Label>
+										<AvInput
+											name="name"
+											id="name"
+											placeholder="Doctor"
+											value={profession.name}
+											onChange={(e) => handleChangeInput(e)}
+											required
+										/>
+									</FormGroup>
+								</Col>
+								<Col md="6">
+									<FormGroup>
+										<Label for="status">Status</Label>
+										<AvInput
+											type="select"
+											id="status"
+											name="status"
+											required
+											onChange={(e) => handleChangeInput(e)}
+										>
+											<option value={profession.status}>
+												{profession.status}
+											</option>
+											<option value="false">False</option>
+											<option value="true">True</option>
+										</AvInput>
+									</FormGroup>
+								</Col>
+								<Col md="12">
+									<FormGroup>
+										<Label for="description">Description</Label>
+										<AvInput
+											name="description"
+											id="description"
+											type="textarea"
+											value={profession.description}
+											onChange={(e) => handleChangeInput(e)}
+											placeholder="Australia"
+											required
+										/>
+									</FormGroup>
+								</Col>
+								<Col>
+									<Button.Ripple color="primary">
+										Update Profession
+									</Button.Ripple>
+								</Col>
+							</Row>
 						</AvForm>
 					</CardBody>
 				</Card>

@@ -24,13 +24,13 @@ export default [
 				id: 'blogList',
 				title: 'List',
 				permissions: ['admin', 'editor'],
-				navLink: '/pages/blog/list',
+				navLink: '/blogs/list',
 			},
 			{
 				id: 'blogDetail',
 				title: 'Add New',
 				permissions: ['admin', 'editor'],
-				navLink: '/pages/blog/detail',
+				navLink: '/blogs/add',
 			},
 			// {
 			// 	id: 'blogEdit',

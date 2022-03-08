@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '@components/avatar';
 
 // ** Store & Actions
-import { getUser } from '../store/action';
+// import { getUser } from '../store/action';
 import { store } from '@store/storeConfig/store';
 
 // ** Third Party Components
@@ -41,7 +41,7 @@ const renderClient = (row) => {
 		],
 		color = states[stateNum];
 
-	if (row.avatar.length) {
+	if (row?.avatar?.length) {
 		return <Avatar className="mr-1" img={row.avatar} width="32" height="32" />;
 	} else {
 		return (
@@ -55,56 +55,9 @@ const renderClient = (row) => {
 	}
 };
 
-// ** Renders Role Columns
-const renderRole = (row) => {
-	const roleObj = {
-		subscriber: {
-			class: 'text-primary',
-			icon: User,
-		},
-		maintainer: {
-			class: 'text-success',
-			icon: Database,
-		},
-		editor: {
-			class: 'text-info',
-			icon: Edit,
-		},
-		author: {
-			class: 'text-warning',
-			icon: Settings,
-		},
-		admin: {
-			class: 'text-danger',
-			icon: Slack,
-		},
-	};
-
-	const Icon = roleObj[row.role] ? roleObj[row.role].icon : Edit;
-
-	return (
-		<span className="text-truncate text-capitalize align-middle">
-			<Icon
-				size={18}
-				className={`${roleObj[row.role] ? roleObj[row.role].class : ''} mr-50`}
-			/>
-			{row.role}
-		</span>
-	);
-};
-
-const statusObj = {
-	pending: 'light-warning',
-	active: 'light-success',
-	inactive: 'light-secondary',
-	blocked: 'light-danger',
-};
-
-// first_name, last_name, phone, email, royal_title,
-// [suspended, blocked, active, inactive] for status(filter for this)
 export const columns = [
 	{
-		name: 'User',
+		name: 'Logo',
 		minWidth: '297px',
 		selector: 'fullName',
 		sortable: true,
@@ -112,46 +65,33 @@ export const columns = [
 			<div className="d-flex justify-content-left align-items-center">
 				{renderClient(row)}
 				<div className="d-flex flex-column">
-					<Link
-						to={`/apps/user/view/${row.id}`}
-						className="user-name text-truncate mb-0"
-						onClick={() => store.dispatch(getUser(row.id))}
-					>
-						<span className="font-weight-bold">{row.fullName}</span>
-					</Link>
-					<small className="text-truncate text-muted mb-0">
-						@{row.username}
-					</small>
+					<small className="text-truncate text-muted mb-0">{row.name}</small>
 				</div>
 			</div>
 		),
 	},
 	{
-		name: 'Email',
+		name: 'Default Currency',
 		minWidth: '320px',
-		selector: 'email',
+		selector: 'default_currency',
 		sortable: true,
-		cell: (row) => row.email,
+		cell: (row) => row.default_currency || 'NGN',
 	},
 	{
-		name: 'Role',
+		name: 'Primary Color',
 		minWidth: '172px',
-		selector: 'role',
+		selector: 'primary_color',
 		sortable: true,
-		cell: (row) => renderRole(row),
+		cell: (row) => row.primary_color || 'Green',
+	},
+	{
+		name: 'Secondary Color',
+		minWidth: '172px',
+		selector: 'secondary_color',
+		sortable: true,
+		cell: (row) => row.secondary_color || 'Black',
 	},
 
-	{
-		name: 'Status',
-		minWidth: '138px',
-		selector: 'status',
-		sortable: true,
-		cell: (row) => (
-			<Badge className="text-capitalize" color={statusObj[row.status]} pill>
-				{row.status}
-			</Badge>
-		),
-	},
 	{
 		name: 'Actions',
 		minWidth: '100px',
@@ -165,25 +105,11 @@ export const columns = [
 				<DropdownMenu right>
 					<DropdownItem
 						tag={Link}
-						to={`/apps/user/view/${row.id}`}
+						to={`/app-settings/edit/${row.id}`}
 						className="w-100"
-						onClick={() => store.dispatch(getUser(row.id))}
-					>
-						<FileText size={14} className="mr-50" />
-						<span className="align-middle">Details</span>
-					</DropdownItem>
-					<DropdownItem
-						tag={Link}
-						to={`/apps/user/edit/${row.id}`}
-						className="w-100"
-						onClick={() => store.dispatch(getUser(row.id))}
 					>
 						<Archive size={14} className="mr-50" />
 						<span className="align-middle">Edit</span>
-					</DropdownItem>
-					<DropdownItem className="w-100">
-						<Trash2 size={14} className="mr-50" />
-						<span className="align-middle">Delete</span>
 					</DropdownItem>
 				</DropdownMenu>
 			</UncontrolledDropdown>

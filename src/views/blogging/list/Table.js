@@ -85,9 +85,9 @@ const CustomHeader = ({
 							onChange={(e) => handleFilter(e.target.value)}
 						/>
 					</div>
-					<Link to="/professions/add">
+					<Link to="/blogs/add">
 						<Button.Ripple color="primary" onClick={toggleSidebar}>
-							Add New Profession
+							Add New Blog
 						</Button.Ripple>
 					</Link>
 				</Col>

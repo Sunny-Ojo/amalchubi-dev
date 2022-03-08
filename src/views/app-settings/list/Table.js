@@ -12,86 +12,14 @@ import { getAllData, getData } from '../store/action';
 import { useDispatch, useSelector } from 'react-redux';
 
 // ** Third Party Components
-import Select from 'react-select';
 import ReactPaginate from 'react-paginate';
 import { ChevronDown } from 'react-feather';
 import DataTable from 'react-data-table-component';
-import { selectThemeColors } from '@utils';
-import {
-	Card,
-	CardHeader,
-	CardTitle,
-	CardBody,
-	Input,
-	Row,
-	Col,
-	Label,
-	CustomInput,
-	Button,
-} from 'reactstrap';
+import { Card, CardHeader } from 'reactstrap';
 
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss';
 import '@styles/react/libs/tables/react-dataTable-component.scss';
-
-// ** Table Header
-const CustomHeader = ({
-	toggleSidebar,
-	handlePerPage,
-	rowsPerPage,
-	handleFilter,
-	searchTerm,
-}) => {
-	return (
-		<div className="invoice-list-table-header w-100 mr-1 ml-50 mt-2 mb-75">
-			<Row>
-				<Col xl="6" className="d-flex align-items-center p-0">
-					<div className="d-flex align-items-center w-100">
-						<Label for="rows-per-page">Show</Label>
-						<CustomInput
-							className="form-control mx-50"
-							type="select"
-							id="rows-per-page"
-							value={rowsPerPage}
-							onChange={handlePerPage}
-							style={{
-								width: '5rem',
-								padding: '0 0.8rem',
-								backgroundPosition:
-									'calc(100% - 3px) 11px, calc(100% - 20px) 13px, 100% 0',
-							}}
-						>
-							<option value="10">10</option>
-							<option value="25">25</option>
-							<option value="50">50</option>
-						</CustomInput>
-						<Label for="rows-per-page">Entries</Label>
-					</div>
-				</Col>
-				<Col
-					xl="6"
-					className="d-flex align-items-sm-center justify-content-lg-end justify-content-start flex-lg-nowrap flex-wrap flex-sm-row flex-column pr-lg-1 p-0 mt-lg-0 mt-1"
-				>
-					<div className="d-flex align-items-center mb-sm-0 mb-1 mr-1">
-						<Label className="mb-0" for="search-invoice">
-							Search:
-						</Label>
-						<Input
-							id="search-invoice"
-							className="ml-50 w-100"
-							type="text"
-							value={searchTerm}
-							onChange={(e) => handleFilter(e.target.value)}
-						/>
-					</div>
-					<Button.Ripple color="primary" onClick={toggleSidebar}>
-						Add New User
-					</Button.Ripple>
-				</Col>
-			</Row>
-		</div>
-	);
-};
 
 const UsersList = () => {
 	// ** Store Vars
@@ -107,6 +35,7 @@ const UsersList = () => {
 		value: '',
 		label: 'Select Role',
 	});
+
 	const [currentStatus, setCurrentStatus] = useState({
 		value: '',
 		label: 'Select Status',
@@ -129,23 +58,6 @@ const UsersList = () => {
 			})
 		);
 	}, [dispatch]);
-
-	// ** User filter options
-	const roleOptions = [
-		{ value: '', label: 'Select Role' },
-		{ value: 'admin', label: 'Admin' },
-		{ value: 'author', label: 'Author' },
-		{ value: 'editor', label: 'Editor' },
-		{ value: 'maintainer', label: 'Maintainer' },
-		{ value: 'subscriber', label: 'Subscriber' },
-	];
-
-	const statusOptions = [
-		{ value: '', label: 'Select Status', number: 0 },
-		{ value: 'pending', label: 'Pending', number: 1 },
-		{ value: 'active', label: 'Active', number: 2 },
-		{ value: 'inactive', label: 'Inactive', number: 3 },
-	];
 
 	// ** Function in get data on page change
 	const handlePagination = (page) => {
@@ -174,20 +86,6 @@ const UsersList = () => {
 			})
 		);
 		setRowsPerPage(value);
-	};
-
-	// ** Function in get data on search query change
-	const handleFilter = (val) => {
-		setSearchTerm(val);
-		dispatch(
-			getData({
-				page: currentPage,
-				perPage: rowsPerPage,
-				role: currentRole.value,
-				status: currentStatus.value,
-				q: val,
-			})
-		);
 	};
 
 	// ** Custom Pagination
@@ -240,60 +138,9 @@ const UsersList = () => {
 		<Fragment>
 			<Card>
 				<CardHeader>
-					<CardTitle tag="h4">Search Filter</CardTitle>
+					<h4>App Setting</h4>
 				</CardHeader>
-				<CardBody>
-					<Row>
-						<Col md="6">
-							<Select
-								isClearable={false}
-								theme={selectThemeColors}
-								className="react-select"
-								classNamePrefix="select"
-								options={roleOptions}
-								value={currentRole}
-								onChange={(data) => {
-									setCurrentRole(data);
-									dispatch(
-										getData({
-											page: currentPage,
-											perPage: rowsPerPage,
-											role: data.value,
-											status: currentStatus.value,
-											q: searchTerm,
-										})
-									);
-								}}
-							/>
-						</Col>
-
-						<Col md="6">
-							<Select
-								theme={selectThemeColors}
-								isClearable={false}
-								className="react-select"
-								classNamePrefix="select"
-								options={statusOptions}
-								W
-								value={currentStatus}
-								onChange={(data) => {
-									setCurrentStatus(data);
-									dispatch(
-										getData({
-											page: currentPage,
-											perPage: rowsPerPage,
-											role: currentRole.value,
-											status: data.value,
-											q: searchTerm,
-										})
-									);
-								}}
-							/>
-						</Col>
-					</Row>
-				</CardBody>
 			</Card>
-
 			<Card>
 				<DataTable
 					noHeader
@@ -306,15 +153,6 @@ const UsersList = () => {
 					className="react-dataTable"
 					paginationComponent={CustomPagination}
 					data={dataToRender()}
-					subHeaderComponent={
-						<CustomHeader
-							toggleSidebar={toggleSidebar}
-							handlePerPage={handlePerPage}
-							rowsPerPage={rowsPerPage}
-							searchTerm={searchTerm}
-							handleFilter={handleFilter}
-						/>
-					}
 				/>
 			</Card>
 

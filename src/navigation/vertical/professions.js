@@ -21,6 +21,7 @@ export default [
 				permissions: ['admin', 'editor'],
 				navLink: '/professions/add',
 			},
+
 			// {
 			// 	id: 'blogEdit',
 			// 	title: 'Edit',

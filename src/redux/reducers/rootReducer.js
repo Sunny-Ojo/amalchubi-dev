@@ -9,6 +9,7 @@ import chat from '@src/views/apps/chat/store/reducer';
 import todo from '@src/views/apps/todo/store/reducer';
 import users from '@src/views/apps/user/store/reducer';
 import email from '@src/views/apps/email/store/reducer';
+import blogs from '@src/views/blogging/store/reducer';
 import professions from '@src/views/professions/store/reducer';
 import invoice from '@src/views/apps/invoice/store/reducer';
 import calendar from '@src/views/apps/calendar/store/reducer';
@@ -17,10 +18,12 @@ import dataTables from '@src/views/tables/data-tables/store/reducer';
 
 const rootReducer = combineReducers({
 	auth,
+
 	todo,
 	chat,
 	email,
 	users,
+	blogs,
 	navbar,
 	professions,
 	layout,
