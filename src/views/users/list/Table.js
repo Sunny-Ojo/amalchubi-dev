@@ -306,7 +306,24 @@ const UsersList = () => {
 					sortIcon={<ChevronDown />}
 					className="react-dataTable"
 					paginationComponent={CustomPagination}
-					data={dataToRender()}
+					data={store.data?.filter((item) => {
+						if (searchTerm === '') {
+							return item;
+						} else if (
+							item?.first_name
+								.toLowerCase()
+								.includes(searchTerm.toLowerCase()) ||
+							item?.last_name
+								.toLowerCase()
+								.includes(searchTerm.toLowerCase()) ||
+							item?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+							item?.phone_number
+								.toLowerCase()
+								.includes(searchTerm.toLowerCase())
+						) {
+							return item;
+						}
+					})}
 					subHeaderComponent={
 						<CustomHeader
 							toggleSidebar={toggleSidebar}

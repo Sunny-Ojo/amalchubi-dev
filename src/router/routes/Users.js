@@ -11,18 +11,18 @@ const UserRoutes = [
 	},
 
 	{
-		path: '/users/edit/:id',
+		path: '/user/edit/:id',
 		component: lazy(() => import('../../views/users/edit')),
 		meta: {
-			navLink: '/users/edit',
+			navLink: '/user/edit',
 		},
 	},
 
 	{
-		path: '/users/view/:id',
+		path: '/user/view/:id',
 		component: lazy(() => import('../../views/users/view')),
 		meta: {
-			navLink: '/users/view/',
+			navLink: '/user/view/',
 		},
 	},
 ];

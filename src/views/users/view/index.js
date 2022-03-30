@@ -15,22 +15,27 @@ import UserInfoCard from './UserInfoCard';
 import UserTimeline from './UserTimeline';
 // import InvoiceList from '../../invoice/list';
 import PermissionsTable from './PermissionsTable';
-
+import { useHistory } from 'react-router-dom';
 // ** Styles
 import '@styles/react/apps/app-users.scss';
 
 const UserView = (props) => {
 	// ** Vars
+	const history = useHistory();
 	const dispatch = useDispatch();
 	const store = useSelector((state) => state.users),
 		{ id } = useParams();
 
-	const handleDeleteUser = (id) => {
-		dispatch(deleteUser(parseInt(id)));
+	const handleDeleteUser = async (id) => {
+		const action = await dispatch(deleteUser(parseInt(id)));
+		if (action) {
+			history.push('/users/list');
+		}
 	};
 	// ** Get suer on mount
 	useEffect(() => {
 		dispatch(getUser(parseInt(id)));
+		console.log(store.selectedUser);
 	}, [dispatch]);
 
 	return store.selectedUser !== null && store.selectedUser !== undefined ? (
@@ -65,7 +70,7 @@ const UserView = (props) => {
 			<h4 className="alert-heading">Users not found</h4>
 			<div className="alert-body">
 				Users with id: {id} doesn't exist. Check list of all Users:{' '}
-				<Link to="/app/user/list">Users List</Link>
+				<Link to="/users/list">Users List</Link>
 			</div>
 		</Alert>
 	);

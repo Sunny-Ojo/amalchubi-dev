@@ -1,27 +1,25 @@
 // ** Initial State
 const initialState = {
-  allData: [],
-  data: [],
-  total: 1,
-  params: {},
-  selectedUser: null
-}
+	allData: [],
+	data: [],
+	total: 1,
+	selectedData: null,
+};
 
-const users = (state = initialState, action) => {
-  switch (action.type) {
-    case 'GET_ALL_DATA':
-      return { ...state, allData: action.data }
-    case 'GET_DATA':
-      return {
-        ...state,
-        data: action.data,
-        total: action.totalPages,
-        params: action.params
-      }
-    case 'GET_USER':
-      return { ...state, selectedUser: action.selectedUser }
-    default:
-      return { ...state }
-  }
-}
-export default users
+const appSettings = (state = initialState, action) => {
+	switch (action.type) {
+		case 'GET_ALL_DATA':
+			return { ...state, allData: action.data };
+		case 'GET_DATA':
+			return {
+				...state,
+				data: action.data,
+				// total: action.totalPages,
+			};
+		case 'UPDATE_SETTINGS':
+			return { ...state, data: action.data };
+		default:
+			return { ...state };
+	}
+};
+export default appSettings;

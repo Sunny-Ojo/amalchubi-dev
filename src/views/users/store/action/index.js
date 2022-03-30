@@ -6,10 +6,11 @@ const MySwal = withReactContent(Swal);
 
 import { swal } from '@utils';
 import axiosClient from '../../../../services/axios';
+import { deleteUserUrl } from '../../../../router/api-routes';
 // ** Get all Data
 export const getAllData = () => {
 	return async (dispatch) => {
-		await axios.get('/api/users/list/all-data').then((response) => {
+		await axios.get('http://localhost:4000/users').then((response) => {
 			dispatch({
 				type: 'GET_ALL_DATA',
 				data: response.data,
@@ -21,11 +22,11 @@ export const getAllData = () => {
 // ** Get data on page or row change
 export const getData = (params) => {
 	return async (dispatch) => {
-		await axios.get('/api/users/list/data', params).then((response) => {
+		await axios.get('http://localhost:4000/users', params).then((response) => {
 			dispatch({
 				type: 'GET_DATA',
-				data: response.data.users,
-				totalPages: response.data.total,
+				data: response.data,
+				totalPages: response.data.length,
 				params,
 			});
 		});
@@ -36,11 +37,12 @@ export const getData = (params) => {
 export const getUser = (id) => {
 	return async (dispatch) => {
 		await axios
-			.get('/api/users/user', { id })
+			// .get(`http://localhost/users/${id}`, { id })
+			.get(`http://127.0.0.1:4000/users/${id}`)
 			.then((response) => {
 				dispatch({
 					type: 'GET_USER',
-					selectedUser: response.data.user,
+					selectedUser: response.data,
 				});
 			})
 			.catch((err) => console.log(err));
@@ -63,7 +65,7 @@ export const deleteUser = (id) => {
 			buttonsStyling: false,
 		}).then(function (result) {
 			if (result.value) {
-				// axiosClient.delete()
+				const response = axiosClient.delete(deleteUserUrl(id));
 				MySwal.fire({
 					icon: 'success',
 					title: 'Deleted!',
@@ -72,6 +74,7 @@ export const deleteUser = (id) => {
 						confirmButton: 'btn btn-success',
 					},
 				});
+				return response;
 			} else if (result.dismiss === MySwal.DismissReason.cancel) {
 				MySwal.fire({
 					title: 'Cancelled',

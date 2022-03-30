@@ -1,10 +1,9 @@
 // ** React Imports
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // ** Store & Actions
-import { deleteUser, getUser } from '../store/action';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 // ** Third Party Components
 import {
@@ -18,32 +17,30 @@ import {
 	Media,
 	Input,
 } from 'reactstrap';
+import { useHistory } from 'react-router-dom';
 import { AvForm, AvInput } from 'availity-reactstrap-validation-safe';
 // ** Reactstrap
-import { Row, Col, Alert } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 
 // ** Styles
 import '@styles/react/apps/app-users.scss';
+import axiosClient from '../../../services/axios';
+import { createUserUrl } from '../../../router/api-routes';
+import { swal } from '../../../utility/Utils';
 
 const AddUser = (props) => {
 	// ** Vars
-	// const dispatch = useDispatch();
-	// const store = useSelector((state) => state.users),
-	// 	{ id } = useParams();
-
-	// const handleDeleteUser = (id) => {
-	// 	dispatch(deleteUser(parseInt(id)));
-	// };
 	const dispatch = useDispatch();
-
+	const history = useHistory();
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [newUser, setNewUser] = useState({
 		avatar: '',
-		firstName: '',
-		lastName: '',
+		first_name: '',
+		last_name: '',
 		email: '',
+		status: '',
 		phone_number: '',
-		facebook_url: '',
-		linkedin_url: '',
+		linkedIn_url: '',
 		facebook_url: '',
 		royal_title: '',
 		password: '',
@@ -55,12 +52,32 @@ const AddUser = (props) => {
 		const { name, value } = e.target;
 		setNewUser({ ...newUser, [name]: value });
 	};
-	const onSubmit = (event, errors) => {
+	const onSubmit = async (event, errors) => {
 		if (!errors.length) {
-			console.log(event);
-			// toggleSidebar();
+			event.preventDefault();
+			try {
+				const response = await axiosClient.post(createUserUrl, {
+					...newUser,
+				});
+				//  if (response) {
+				console.log(response);
+				// if (response.data.status_code === 201) {
+				swal('Great job!', response.data.message, 'success');
+				history.push(`/users/list`);
+				// } else {
+				// 	swal('Oops!', response.data.message, 'error');
+				// 	setIsSubmitting(false);
+				// }
+				// } else {
+				// 	swal('Oops!', 'Something went wrong with your network.', 'error');
+				// 	setIsSubmitting(false);
+				// }
+			} catch (error) {
+				setIsSubmitting(false);
+				swal('Oops!', error?.response?.data?.message, 'error');
+				console.error({ error });
+			}
 		}
-		event.preventDefault();
 	};
 	// ** Get suer on mount
 	// useEffect(() => {
@@ -115,12 +132,12 @@ const AddUser = (props) => {
 					<Row>
 						<Col md="6">
 							<FormGroup>
-								<Label for="firstName">First Name</Label>
+								<Label for="first_name">First Name</Label>
 								<AvInput
-									name="firstName"
-									id="firstName"
+									name="first_name"
+									id="first_name"
 									placeholder="John"
-									value={newUser.firstName}
+									value={newUser.first_name}
 									onChange={(e) => handleChangeInput(e)}
 									required
 								/>
@@ -128,12 +145,12 @@ const AddUser = (props) => {
 						</Col>
 						<Col md="6">
 							<FormGroup>
-								<Label for="lastName">Last Name</Label>
+								<Label for="last_name">Last Name</Label>
 								<AvInput
-									name="lastName"
-									id="lastName"
+									name="last_name"
+									id="last_name"
 									placeholder="Doe"
-									value={newUser.lastName}
+									value={newUser.last_name}
 									onChange={(e) => handleChangeInput(e)}
 									required
 								/>
@@ -185,11 +202,11 @@ const AddUser = (props) => {
 						</Col>
 						<Col md="6">
 							<FormGroup>
-								<Label for="linkedin_url">LinkedIn Url</Label>
+								<Label for="linkedIn_url">LinkedIn Url</Label>
 								<AvInput
-									name="linkedin_url"
-									id="linkedin_url"
-									value={newUser.linkedin_url}
+									name="linkedIn_url"
+									id="linkedIn_url"
+									value={newUser.linkedIn_url}
 									onChange={(e) => handleChangeInput(e)}
 									placeholder="Australia"
 									required
@@ -220,6 +237,21 @@ const AddUser = (props) => {
 									placeholder="Australia"
 									required
 								/>
+							</FormGroup>
+						</Col>
+						<Col md="12" sm="12">
+							<FormGroup>
+								<Label for="status">Status</Label>
+								<Input
+									onChange={(e) => handleChangeInput(e)}
+									type="select"
+									name="status"
+									id="status"
+								>
+									<option value="pending">Pending</option>
+									<option value="active">Active</option>
+									<option value="inactive">Inactive</option>
+								</Input>
 							</FormGroup>
 						</Col>
 						<Col md="6">
@@ -253,7 +285,7 @@ const AddUser = (props) => {
 						</Col>
 						<Col md="12">
 							<Button type="submit" className="mr-1" color="primary">
-								Submit
+								{isSubmitting ? 'Creating new user ' : 'Submit'}
 							</Button>
 						</Col>
 					</Row>

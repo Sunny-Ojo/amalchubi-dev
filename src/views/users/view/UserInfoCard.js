@@ -6,7 +6,15 @@ import Avatar from '@components/avatar';
 
 // ** Third Party Components
 import { Card, CardBody, CardText, Button, Row, Col } from 'reactstrap';
-import { User, Check, Star, Flag, Phone, Facebook } from 'react-feather';
+import {
+	User,
+	Check,
+	Star,
+	Flag,
+	Phone,
+	Facebook,
+	Linkedin,
+} from 'react-feather';
 
 const UserInfoCard = ({ selectedUser, deleteUser }) => {
 	// ** render user img
@@ -38,7 +46,7 @@ const UserInfoCard = ({ selectedUser, deleteUser }) => {
 					initials
 					color={color}
 					className="rounded"
-					content={selectedUser.fullName}
+					content={`${selectedUser?.first_name} ${selectedUser?.last_name}`}
 					contentStyles={{
 						borderRadius: 0,
 						fontSize: 'calc(36px)',
@@ -52,6 +60,10 @@ const UserInfoCard = ({ selectedUser, deleteUser }) => {
 				/>
 			);
 		}
+	};
+
+	const renderRoles = (roles) => {
+		return roles && roles.map((role) => `${role}, `);
 	};
 
 	return (
@@ -70,7 +82,7 @@ const UserInfoCard = ({ selectedUser, deleteUser }) => {
 									<div className="user-info mb-1">
 										<h4 className="mb-0">
 											{selectedUser !== null
-												? selectedUser.fullName
+												? `${selectedUser.first_name} ${selectedUser.last_name}`
 												: 'Eleanor Aguilar'}
 										</h4>
 										<CardText tag="span">
@@ -82,7 +94,7 @@ const UserInfoCard = ({ selectedUser, deleteUser }) => {
 									<div className="d-flex flex-wrap align-items-center">
 										<Button.Ripple
 											tag={Link}
-											to={`/users/edit/${selectedUser.id}`}
+											to={`/user/edit/${selectedUser.id}`}
 											color="primary"
 										>
 											Edit
@@ -91,7 +103,7 @@ const UserInfoCard = ({ selectedUser, deleteUser }) => {
 											className="ml-1"
 											color="danger"
 											outline
-											onClick={() => deleteUser(selectedUser.id)}
+											onClick={() => deleteUser(selectedUser?.id)}
 										>
 											Delete
 										</Button.Ripple>
@@ -114,7 +126,7 @@ const UserInfoCard = ({ selectedUser, deleteUser }) => {
 								</div>
 								<CardText className="mb-0">
 									{selectedUser !== null
-										? selectedUser.username
+										? `${selectedUser.first_name} ${selectedUser.last_name}`
 										: 'eleanor.aguilar'}
 								</CardText>
 							</div>
@@ -143,7 +155,9 @@ const UserInfoCard = ({ selectedUser, deleteUser }) => {
 									</CardText>
 								</div>
 								<CardText className="text-capitalize mb-0">
-									{selectedUser !== null ? selectedUser.role : 'Admin'}
+									{selectedUser !== null
+										? renderRoles(selectedUser.roles)
+										: 'Admin'}
 								</CardText>
 							</div>
 							{/* <div className='d-flex flex-wrap align-items-center my-50'>
@@ -167,7 +181,7 @@ const UserInfoCard = ({ selectedUser, deleteUser }) => {
 								</div>
 								<CardText className="mb-0">
 									{selectedUser !== null
-										? selectedUser.contact
+										? selectedUser.phone_number
 										: '(123) 456-7890'}
 								</CardText>
 							</div>
@@ -178,17 +192,32 @@ const UserInfoCard = ({ selectedUser, deleteUser }) => {
 										tag="span"
 										className="user-info-tile font-weight-bold mb-0"
 									>
-										Facebook URL:{' '}
-										{selectedUser !== null
-											? 'https://facebook.com/sunnyojonjoku'
-											: 'https://facebook.com/sunnyojonjoku'}
+										{selectedUser !== null ? (
+											<a href={selectedUser.facebook_url}>
+												{selectedUser.facebook_url}
+											</a>
+										) : (
+											'https://facebook.com/sunnyojonjoku'
+										)}
 									</CardText>
 								</div>
-								{/* <CardText className="mb-0 wrap-text">
-									{selectedUser !== null
-										? 'https://facebook.com/sunnyojonjoku'
-										: 'https://facebook.com/sunnyojonjoku'}
-								</CardText> */}
+							</div>
+							<div className="d-flex flex-wrap align-items-center">
+								<div className="">
+									<Linkedin className="mr-1" size={14} />
+									<CardText
+										tag="span"
+										className="user-info-tile font-weight-bold mb-0"
+									>
+										{selectedUser !== null ? (
+											<a href={selectedUser.linkedIn_url}>
+												{selectedUser.linkedIn_url}
+											</a>
+										) : (
+											'https://linkedin.com/sunnyojonjoku'
+										)}
+									</CardText>
+								</div>
 							</div>
 						</div>
 					</Col>

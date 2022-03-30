@@ -29,6 +29,8 @@ import '@styles/react/apps/app-users.scss';
 import { AvForm, AvInput } from 'availity-reactstrap-validation-safe';
 import { Editor } from '@tinymce/tinymce-react';
 import { swal } from '../../../utility/Utils';
+import EditorInline from '../../forms/form-elements/editor/EditorInline';
+import EditorFullFeatured from '../../forms/form-elements/editor/EditorFullFeatured';
 
 const onSubmit = (event, errors) => {
 	if (!errors.length) {
@@ -102,6 +104,7 @@ const AddBlog = () => {
 								<Col md="12">
 									<FormGroup>
 										<Label for="content">Content</Label>
+										<EditorFullFeatured />
 										<Editor
 											apiKey="emjshh1tafcjgizkmk6eofcmmcxc2cmugajs9l2ordjyca64"
 											initialValue={''}

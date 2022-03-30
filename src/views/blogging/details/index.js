@@ -1,9 +1,9 @@
 import { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
 import classnames from 'classnames';
+import { useParams } from 'react-router-dom';
 import Sidebar from '../BlogSidebar';
 import Avatar from '@components/avatar';
-import { useParams } from 'react-router-dom';
 import cmtImg from '@src/assets/images/portrait/small/avatar-s-6.jpg';
 import { kFormatter } from '@utils';
 import {
@@ -43,9 +43,11 @@ import '@styles/base/pages/page-blog.scss';
 
 const BlogDetails = () => {
 	const [data, setData] = useState(null);
-	// const { id } = useParams();
+
+	const { id } = useParams();
+
+	alert(id);
 	useEffect(() => {
-		// alert(id);
 		axios.get('/blog/list/data/detail').then((res) => setData(res.data));
 	}, []);
 

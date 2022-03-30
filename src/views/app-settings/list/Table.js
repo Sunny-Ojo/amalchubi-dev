@@ -21,10 +21,10 @@ import { Card, CardHeader } from 'reactstrap';
 import '@styles/react/libs/react-select/_react-select.scss';
 import '@styles/react/libs/tables/react-dataTable-component.scss';
 
-const UsersList = () => {
+const AppSetingsListt = () => {
 	// ** Store Vars
 	const dispatch = useDispatch();
-	const store = useSelector((state) => state.users);
+	const store = useSelector((state) => state.appSettings);
 
 	// ** States
 	const [searchTerm, setSearchTerm] = useState('');
@@ -50,11 +50,11 @@ const UsersList = () => {
 		dispatch(getAllData());
 		dispatch(
 			getData({
-				page: currentPage,
-				perPage: rowsPerPage,
-				role: currentRole.value,
-				status: currentStatus.value,
-				q: searchTerm,
+				// page: currentPage,
+				// perPage: rowsPerPage,
+				// role: currentRole.value,
+				// status: currentStatus.value,
+				// q: searchTerm,
 			})
 		);
 	}, [dispatch]);
@@ -125,12 +125,13 @@ const UsersList = () => {
 			return filters[k].length > 0;
 		});
 
-		if (store.data.length > 0) {
-			return store.data;
-		} else if (store.data.length === 0 && isFiltered) {
+		if (store?.data?.length > 0) {
+			return store?.data;
+		} else if (store?.data?.length === 0 && isFiltered) {
 			return [];
 		} else {
-			return store.allData.slice(0, rowsPerPage);
+			return store.allData;
+			// return store?.allData?.slice(0, rowsPerPage);
 		}
 	};
 
@@ -138,11 +139,12 @@ const UsersList = () => {
 		<Fragment>
 			<Card>
 				<CardHeader>
-					<h4>App Setting</h4>
+					<h4>App Settings</h4>
 				</CardHeader>
 			</Card>
 			<Card>
 				<DataTable
+					title="APP SETTINGS"
 					noHeader
 					pagination
 					subHeader
@@ -161,4 +163,4 @@ const UsersList = () => {
 	);
 };
 
-export default UsersList;
+export default AppSetingsListt;

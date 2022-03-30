@@ -52,7 +52,7 @@ const renderClient = (row) => {
 			<Avatar
 				color={color || 'primary'}
 				className="mr-1"
-				content={row.fullName || 'John Doe'}
+				content={`${row.first_name} ${row.last_name}` || 'John Doe'}
 				initials
 			/>
 		);
@@ -154,15 +154,12 @@ export const columns = [
 				{renderClient(row)}
 				<div className="d-flex flex-column">
 					<Link
-						to={`/apps/user/view/${row.id}`}
+						to={`/user/view/${row.id}`}
 						className="user-name text-truncate mb-0"
 						onClick={() => store.dispatch(getUser(row.id))}
 					>
-						<span className="font-weight-bold">{row.fullName}</span>
+						<span className="font-weight-bold">{`${row.first_name} ${row.last_name}`}</span>
 					</Link>
-					<small className="text-truncate text-muted mb-0">
-						@{row.username}
-					</small>
 				</div>
 			</div>
 		),
@@ -172,25 +169,25 @@ export const columns = [
 		minWidth: '320px',
 		selector: 'email',
 		sortable: true,
-		cell: (row) => row.email,
+		cell: (row) => row.email || '-',
 	},
 	{
-		name: 'Role',
+		name: 'Phone Number',
 		minWidth: '172px',
 		selector: 'role',
 		sortable: true,
-		cell: (row) => renderRole(row),
+		cell: (row) => row.phone_number || '-',
 	},
 
 	{
-		name: 'Royal Title',
+		name: 'Status',
 		minWidth: '138px',
 		selector: 'status',
 		sortable: true,
 		cell: (row) => (
 			<Badge
 				className="text-capitalize"
-				color={statusObj[row?.royal_title || '-']}
+				color={statusObj[row?.status || '-']}
 				pill
 			>
 				{row?.status || '-'}
@@ -210,7 +207,7 @@ export const columns = [
 				<DropdownMenu right>
 					<DropdownItem
 						tag={Link}
-						to={`/users/view/${row.id}`}
+						to={`/user/view/${row.id}`}
 						className="w-100"
 						onClick={() => store.dispatch(getUser(row.id))}
 					>
@@ -219,7 +216,7 @@ export const columns = [
 					</DropdownItem>
 					<DropdownItem
 						tag={Link}
-						to={`/users/edit/${row.id}`}
+						to={`/user/edit/${row.id}`}
 						className="w-100"
 						onClick={() => store.dispatch(getUser(row.id))}
 					>

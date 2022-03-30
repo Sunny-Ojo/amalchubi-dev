@@ -15,10 +15,11 @@ import invoice from '@src/views/apps/invoice/store/reducer';
 import calendar from '@src/views/apps/calendar/store/reducer';
 import ecommerce from '@src/views/apps/ecommerce/store/reducer';
 import dataTables from '@src/views/tables/data-tables/store/reducer';
+import appSettings from '../../views/app-settings/store/reducer';
 
 const rootReducer = combineReducers({
 	auth,
-
+	appSettings,
 	todo,
 	chat,
 	email,

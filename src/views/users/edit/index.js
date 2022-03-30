@@ -42,6 +42,7 @@ const UserEdit = () => {
 	// ** Function to get user on mount
 	useEffect(() => {
 		dispatch(getUser(parseInt(id)));
+		console.log(store);
 	}, [dispatch]);
 
 	return store.selectedUser !== null && store.selectedUser !== undefined ? (
