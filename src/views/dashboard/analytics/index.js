@@ -134,7 +134,7 @@ const AnalyticsDashboard = () => {
 						kFormatter={kFormatter}
 						warning={colors.warning.main}
 					/>
-				</Col>
+				</Col> 
 			</Row>
 			<Row className="match-height">
 				<Col lg="6" xs="12">

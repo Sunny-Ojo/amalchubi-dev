@@ -6,6 +6,7 @@ import { Fragment, useState, useEffect } from 'react';
 
 // ** Columns
 import { columns } from './columns';
+import Breadcrumbs from '@components/breadcrumbs';
 
 // ** Store & Actions
 import { getAllData, getData } from '../store/action';
@@ -241,7 +242,12 @@ const UsersList = () => {
 
 	return (
 		<Fragment>
-			<Card>
+			<Breadcrumbs
+				breadCrumbTitle="Professions"
+				breadCrumbParent="Professions Management"
+				breadCrumbActive="List"
+			/>
+			{/* <Card>
 				<CardHeader>
 					<CardTitle tag="h4">Search Filter</CardTitle>
 				</CardHeader>
@@ -295,7 +301,7 @@ const UsersList = () => {
 						</Col>
 					</Row>
 				</CardBody>
-			</Card>
+			</Card> */}
 
 			<Card>
 				<DataTable
@@ -308,7 +314,16 @@ const UsersList = () => {
 					sortIcon={<ChevronDown />}
 					className="react-dataTable"
 					paginationComponent={CustomPagination}
-					data={dataToRender()}
+					data={store?.data?.filter((item) => {
+						if (searchTerm === '') {
+							return item;
+						} else if (
+							item?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+							item?.description.toLowerCase().includes(searchTerm.toLowerCase())
+						) {
+							return item;
+						}
+					})}
 					subHeaderComponent={
 						<CustomHeader
 							toggleSidebar={toggleSidebar}

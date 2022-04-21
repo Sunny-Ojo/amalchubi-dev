@@ -4,6 +4,7 @@ import { Fragment, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 // ** Invoice List Sidebar
 import Sidebar from './Sidebar';
+import Breadcrumbs from '@components/breadcrumbs';
 
 // ** Columns
 import { columns } from './columns';
@@ -239,7 +240,12 @@ const UsersList = () => {
 
 	return (
 		<Fragment>
-			<Card>
+			<Breadcrumbs
+				breadCrumbTitle="Users"
+				breadCrumbParent="Users Management"
+				breadCrumbActive="List"
+			/>
+			{/* <Card>
 				<CardHeader>
 					<CardTitle tag="h4">Search Filter</CardTitle>
 				</CardHeader>
@@ -293,7 +299,7 @@ const UsersList = () => {
 						</Col>
 					</Row>
 				</CardBody>
-			</Card>
+			</Card> */}
 
 			<Card>
 				<DataTable
@@ -306,7 +312,7 @@ const UsersList = () => {
 					sortIcon={<ChevronDown />}
 					className="react-dataTable"
 					paginationComponent={CustomPagination}
-					data={store.data?.filter((item) => {
+					data={store.allData?.filter((item) => {
 						if (searchTerm === '') {
 							return item;
 						} else if (

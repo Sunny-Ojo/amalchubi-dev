@@ -1,10 +1,11 @@
 // ** React Imports
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 // ** Store & Actions
 import { getProfession } from '../store/action';
 import { useSelector, useDispatch } from 'react-redux';
+import Breadcrumbs from '@components/breadcrumbs';
 
 // ** Third Party Components
 import { User, Info, Share2 } from 'react-feather';
@@ -52,78 +53,76 @@ const AddProfession = () => {
 	// ** Function to get user on mount
 
 	return (
-		<Row className="app-user-edit">
-			<Col sm="12">
-				<Card>
-					<CardBody className="pt-2">
-						<Nav pills>
-							<NavItem>
-								<NavLink active={'1' === '1'}>
-									<span className="align-middle d-none d-sm-block">
-										Create a new Profession
-									</span>
-								</NavLink>
-							</NavItem>
-						</Nav>
-						<AvForm onSubmit={onSubmit}>
-							<Row>
-								<Col md="6">
-									<FormGroup>
-										<Label for="name">Name</Label>
-										<AvInput
-											name="name"
-											id="name"
-											placeholder="Doctor"
-											value={profession.name}
-											onChange={(e) => handleChangeInput(e)}
-											required
-										/>
-									</FormGroup>
-								</Col>
+		<Fragment>
+			<Breadcrumbs
+				breadCrumbTitle="Professions"
+				breadCrumbParent="Professions Management"
+				breadCrumbActive="Create"
+			/>
+			<Row className="app-user-edit">
+				<Col sm="12">
+					<Card>
+						<CardBody className="pt-2">
+							<AvForm onSubmit={onSubmit}>
+								<Row>
+									<Col md="6">
+										<FormGroup>
+											<Label for="name">Name</Label>
+											<AvInput
+												name="name"
+												id="name"
+												placeholder="Doctor"
+												value={profession.name}
+												onChange={(e) => handleChangeInput(e)}
+												required
+											/>
+										</FormGroup>
+									</Col>
 
-								<Col md="6">
-									<FormGroup>
-										<Label for="status">Status</Label>
-										<AvInput
-											type="select"
-											id="status"
-											name="status"
-											required
-											onChange={(e) => handleChangeInput(e)}
-										>
-											<option value={profession.status}>
-												{profession.status}
-											</option>
-											<option value="false">False</option>
-											<option value="true">True</option>
-										</AvInput>
-									</FormGroup>
-								</Col>
-								<Col md="12">
-									<FormGroup>
-										<Label for="description">Description</Label>
-										<AvInput
-											name="description"
-											id="description"
-											value={profession.description}
-											onChange={(e) => handleChangeInput(e)}
-											placeholder="Description for profession"
-											required
-											type="textarea"
-										/>
-									</FormGroup>
-								</Col>
-								<Col>
-									<Button.Ripple color="primary">
-										Create Profession
-									</Button.Ripple>
-								</Col>
-							</Row>
-						</AvForm>
-					</CardBody>
-				</Card>
-			</Col>
-		</Row>
+									<Col md="6">
+										<FormGroup>
+											<Label for="status">Status</Label>
+											<AvInput
+												type="select"
+												id="status"
+												name="status"
+												required
+												onChange={(e) => handleChangeInput(e)}
+											>
+												<option value={profession.status}>
+													{profession.status}
+												</option>
+												<option value="false">False</option>
+												<option value="true">True</option>
+											</AvInput>
+										</FormGroup>
+									</Col>
+									<Col md="12">
+										<FormGroup>
+											<Label for="description">Description</Label>
+											<AvInput
+												name="description"
+												id="description"
+												value={profession.description}
+												onChange={(e) => handleChangeInput(e)}
+												placeholder="Description for profession"
+												required
+												type="textarea"
+											/>
+										</FormGroup>
+									</Col>
+									<Col>
+										<Button.Ripple color="primary">
+											Create Profession
+										</Button.Ripple>
+									</Col>
+								</Row>
+							</AvForm>
+						</CardBody>
+					</Card>
+				</Col>
+			</Row>
+		</Fragment>
 	);
 };
 export default AddProfession;

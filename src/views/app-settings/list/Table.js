@@ -137,11 +137,11 @@ const AppSetingsListt = () => {
 
 	return (
 		<Fragment>
-			<Card>
+			{/* <Card>
 				<CardHeader>
 					<h4>App Settings</h4>
 				</CardHeader>
-			</Card>
+			</Card> */}
 			<Card>
 				<DataTable
 					title="APP SETTINGS"

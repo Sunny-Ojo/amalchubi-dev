@@ -16,7 +16,8 @@ import {
 	NavLink,
 } from 'reactstrap';
 import '@styles/react/apps/app-users.scss';
-
+import '@uppy/core/dist/style.css';
+import '@uppy/dashboard/dist/style.css';
 import { AvForm, AvInput } from 'availity-reactstrap-validation-safe';
 import { swal } from '../../../utility/Utils';
 import ImageUploader from '../../../services/ImageUploader';
@@ -44,7 +45,7 @@ const AppsettingsEdit = () => {
 	};
 	const handleChangeInput = (e) => {
 		const { name, value } = e.target;
-		setSettings({ ...setSettings, [name]: value });
+		setSettings({ ...settings, [name]: value });
 	};
 	const onSubmit = async (event, errors) => {
 		if (errors && !errors.length) {
@@ -81,16 +82,6 @@ const AppsettingsEdit = () => {
 				<Col sm="12">
 					<Card>
 						<CardBody className="pt-2">
-							<Nav pills>
-								<NavItem>
-									<NavLink active={'1' === '1'}>
-										<span className="align-middle d-none d-sm-block">
-											Update App Settings
-											{JSON.stringify(settings)}
-										</span>
-									</NavLink>
-								</NavItem>
-							</Nav>
 							<AvForm onSubmit={onSubmit}>
 								<Row>
 									<Col md="12">

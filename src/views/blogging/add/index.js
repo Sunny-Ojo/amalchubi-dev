@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 // ** Styles
 import '@styles/react/libs/editor/editor.scss';
 import '@styles/react/libs/react-select/_react-select.scss';
+import Breadcrumbs from '@components/breadcrumbs';
 
 // ** Third Party Components
 import {
@@ -74,17 +75,13 @@ const AddBlog = () => {
 	return (
 		<Row className="app-user-edit">
 			<Col sm="12">
+				<Breadcrumbs
+					breadCrumbTitle="Blogs"
+					breadCrumbParent="Blog Management"
+					breadCrumbActive="Create"
+				/>
 				<Card>
 					<CardBody className="pt-2">
-						<Nav pills>
-							<NavItem>
-								<NavLink active={'1' === '1'}>
-									<span className="align-middle d-none d-sm-block">
-										Create a new Blog
-									</span>
-								</NavLink>
-							</NavItem>
-						</Nav>
 						<AvForm onSubmit={onSubmit}>
 							<Row>
 								<Col md="12">
