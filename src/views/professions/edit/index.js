@@ -5,6 +5,7 @@ import { useParams, Link, useHistory } from 'react-router-dom';
 // ** Store & Actions
 import { getProfession } from '../store/action';
 import { useSelector, useDispatch } from 'react-redux';
+import Breadcrumbs from '@components/breadcrumbs';
 
 // ** Third Party Components
 import { User } from 'react-feather';
@@ -72,17 +73,13 @@ const ProfessionEdit = () => {
 		store.selectedProfession !== undefined ? (
 		<Row className="app-user-edit">
 			<Col sm="12">
+				<Breadcrumbs
+					breadCrumbTitle=" Professions"
+					breadCrumbParent="Professions Management"
+					breadCrumbActive="Edit"
+				/>
 				<Card>
 					<CardBody className="pt-2">
-						<Nav pills>
-							<NavItem>
-								<NavLink active={activeTab === '1'} onClick={() => toggle('1')}>
-									<span className="align-middle d-none d-sm-block">
-										Edit Profession Details
-									</span>
-								</NavLink>
-							</NavItem>
-						</Nav>
 						<AvForm onSubmit={onSubmit}>
 							<Row>
 								<Col md="6">

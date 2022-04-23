@@ -3,9 +3,9 @@
     {
       "id": 1,
       "logo": {},
-      "name": "json-server",
-      "default_currency": "USD",
-      "primary_color": "redd",
+      "name": "json-serve",
+      "default_currency": "NGN",
+      "primary_color": "red",
       "secondary_color": "purple"
     }
   ],

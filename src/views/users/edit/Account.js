@@ -144,7 +144,7 @@ const UserAccountTab = ({ selectedUser }) => {
 	return (
 		<Row>
 			<Col sm="12">
-				{JSON.stringify(user)}
+				{/* {JSON.stringify(user)} */}
 				<Media className="mb-2">
 					{renderUserAvatar()}
 					<Media className="mt-50" body>

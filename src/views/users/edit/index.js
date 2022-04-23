@@ -28,6 +28,7 @@ import {
 
 // ** Styles
 import '@styles/react/apps/app-users.scss';
+import Breadcrumbs from '@components/breadcrumbs';
 
 const UserEdit = () => {
 	// ** States & Vars
@@ -47,6 +48,11 @@ const UserEdit = () => {
 	return store.selectedUser !== null && store.selectedUser !== undefined ? (
 		<Row className="app-user-edit">
 			<Col sm="12">
+				<Breadcrumbs
+					breadCrumbTitle="Users"
+					breadCrumbParent="Users Management"
+					breadCrumbActive="Edit"
+				/>
 				<Card>
 					<CardBody className="pt-2">
 						<Nav pills>
