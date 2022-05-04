@@ -26,7 +26,7 @@ import { Row, Col } from 'reactstrap';
 // ** Styles
 import '@styles/react/apps/app-users.scss';
 import axiosClient from '../../../services/axios';
-import { createUserUrl } from '../../../router/api-routes';
+import { registerUserUrl } from '../../../router/api-routes';
 import { swal } from '../../../utility/Utils';
 
 const AddUser = (props) => {
@@ -46,7 +46,7 @@ const AddUser = (props) => {
 		royal_title: '',
 		password: '',
 		password_confirmation: '',
-		roles: [],
+		role: '',
 	});
 
 	const handleChangeInput = (e) => {
@@ -56,23 +56,32 @@ const AddUser = (props) => {
 	const onSubmit = async (event, errors) => {
 		if (!errors.length) {
 			event.preventDefault();
+			const formData = new FormData();
+			formData.append('avatar', newUser?.avatar);
+			formData.append('first_name', newUser?.first_name);
+			formData.append('last_name', newUser?.last_name);
+			formData.append('email', newUser?.email);
+			formData.append('status', newUser?.status);
+			formData.append('linkedIn_url', newUser?.linkedIn_url);
+			formData.append('faceboo_url', newUser?.facebook_url);
+			formData.append('royal_title', newUser?.royal_title);
+			formData.append('password', newUser?.password);
+			formData.append('password_confirmation', newUser?.password_confirmation);
+			formData.append('role', newUser?.role);
 			try {
-				const response = await axiosClient.post(createUserUrl, {
-					...newUser,
-				});
+				const response = await axiosClient.post(registerUserUrl, formData);
 				//  if (response) {
-				console.log(response);
 				// if (response.data.status_code === 201) {
-				swal('Great job!', response.data.message, 'success');
-				history.push(`/users/list`);
-				// } else {
-				// 	swal('Oops!', response.data.message, 'error');
-				// 	setIsSubmitting(false);
-				// }
-				// } else {
-				// 	swal('Oops!', 'Something went wrong with your network.', 'error');
-				// 	setIsSubmitting(false);
-				// }
+				if (response?.status === 201 || 200) {
+					swal('Great job!', 'User has been created', 'success');
+					history.push(`/users/list`);
+				} else {
+					swal(
+						'Oops!',
+						"if you aren't redirected, something wrong must have happened",
+						'error'
+					);
+				}
 			} catch (error) {
 				setIsSubmitting(false);
 				swal('Oops!', error?.response?.data?.message, 'error');
@@ -148,7 +157,7 @@ const AddUser = (props) => {
 										placeholder="John"
 										value={newUser.first_name}
 										onChange={(e) => handleChangeInput(e)}
-										required
+										// required
 									/>
 								</FormGroup>
 							</Col>
@@ -161,7 +170,7 @@ const AddUser = (props) => {
 										placeholder="Doe"
 										value={newUser.last_name}
 										onChange={(e) => handleChangeInput(e)}
-										required
+										// required
 									/>
 								</FormGroup>
 							</Col>
@@ -175,7 +184,7 @@ const AddUser = (props) => {
 										value={newUser.email}
 										onChange={(e) => handleChangeInput(e)}
 										placeholder="john.doe@example.com"
-										required
+										// required
 									/>
 									<FormText color="muted">
 										You can use letters, numbers & periods
@@ -191,7 +200,7 @@ const AddUser = (props) => {
 										placeholder="+2341223949586"
 										value={newUser.phone_number}
 										onChange={(e) => handleChangeInput(e)}
-										required
+										// required
 									/>
 								</FormGroup>
 							</Col>
@@ -205,7 +214,7 @@ const AddUser = (props) => {
 										placeholder="+2341223949586"
 										value={newUser.facebook_url}
 										onChange={(e) => handleChangeInput(e)}
-										required
+										// required
 									/>
 								</FormGroup>
 							</Col>
@@ -218,7 +227,7 @@ const AddUser = (props) => {
 										value={newUser.linkedIn_url}
 										onChange={(e) => handleChangeInput(e)}
 										placeholder="Australia"
-										required
+										// required
 									/>
 								</FormGroup>
 							</Col>
@@ -227,16 +236,14 @@ const AddUser = (props) => {
 								<FormGroup>
 									<Label for="user-role">User Role</Label>
 									<AvInput
+										onChange={(e) => handleChangeInput(e)}
 										type="select"
 										id="user-role"
-										name="user-role"
-										required
+										name="role"
+										// required
 									>
-										<option value="subscriber">Subscriber</option>
-										<option value="editor">Editor</option>
-										<option value="maintainer">Maintainer</option>
-										<option value="author">Author</option>
 										<option value="admin">Admin</option>
+										<option value="member">Member</option>
 									</AvInput>
 								</FormGroup>
 							</Col>
@@ -249,7 +256,7 @@ const AddUser = (props) => {
 										value={newUser.royal_title}
 										onChange={(e) => handleChangeInput(e)}
 										placeholder="Australia"
-										required
+										// required
 									/>
 								</FormGroup>
 							</Col>
@@ -262,9 +269,9 @@ const AddUser = (props) => {
 										name="status"
 										id="status"
 									>
-										<option value="pending">Pending</option>
-										<option value="active">Active</option>
-										<option value="inactive">Inactive</option>
+										{/* <option value="pending">Pending</option> */}
+										<option value="1">Active</option>
+										<option value="0">Inactive</option>
 									</Input>
 								</FormGroup>
 							</Col>
@@ -277,7 +284,7 @@ const AddUser = (props) => {
 										placeholder="password"
 										value={newUser.password}
 										onChange={(e) => handleChangeInput(e)}
-										required
+										// required
 										type="password"
 									/>
 								</FormGroup>
@@ -294,7 +301,7 @@ const AddUser = (props) => {
 										placeholder="password confirmation"
 										value={newUser.password_confirmation}
 										onChange={(e) => handleChangeInput(e)}
-										required
+										// required
 										type="password"
 									/>
 								</FormGroup>

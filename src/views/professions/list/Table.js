@@ -100,7 +100,7 @@ const CustomHeader = ({
 const UsersList = () => {
 	// ** Store Vars
 	const dispatch = useDispatch();
-	const store = useSelector((state) => state.users);
+	const store = useSelector((state) => state.professions);
 
 	// ** States
 	const [searchTerm, setSearchTerm] = useState('');
@@ -123,15 +123,15 @@ const UsersList = () => {
 	// ** Get data on mount
 	useEffect(() => {
 		dispatch(getAllData());
-		dispatch(
-			getData({
-				page: currentPage,
-				perPage: rowsPerPage,
-				role: currentRole.value,
-				status: currentStatus.value,
-				q: searchTerm,
-			})
-		);
+		// dispatch(
+		// 	getData({
+		// 		page: currentPage,
+		// 		perPage: rowsPerPage,
+		// 		role: currentRole.value,
+		// 		status: currentStatus.value,
+		// 		q: searchTerm,
+		// 	})
+		// );
 	}, [dispatch]);
 
 	// ** User filter options
@@ -304,7 +304,8 @@ const UsersList = () => {
 			</Card> */}
 
 			<Card>
-				<DataTable
+				{JSON.stringify(store?.allData)}
+				{/* <DataTable
 					noHeader
 					pagination
 					subHeader
@@ -333,7 +334,7 @@ const UsersList = () => {
 							handleFilter={handleFilter}
 						/>
 					}
-				/>
+				/> */}
 			</Card>
 
 			{/* <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} /> */}

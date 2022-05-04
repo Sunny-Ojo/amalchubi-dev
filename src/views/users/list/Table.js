@@ -35,6 +35,8 @@ import {
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss';
 import '@styles/react/libs/tables/react-dataTable-component.scss';
+import { listUsersUrl } from '../../../router/api-routes';
+import axiosClient from '../../../services/axios';
 
 // ** Table Header
 const CustomHeader = ({
@@ -103,7 +105,7 @@ const UsersList = () => {
 	// ** States
 	const [searchTerm, setSearchTerm] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const [currentRole, setCurrentRole] = useState({
 		value: '',
@@ -120,6 +122,7 @@ const UsersList = () => {
 
 	// ** Get data on mount
 	useEffect(() => {
+		// getUsers();
 		dispatch(getAllData());
 		dispatch(
 			getData({
@@ -312,7 +315,7 @@ const UsersList = () => {
 					sortIcon={<ChevronDown />}
 					className="react-dataTable"
 					paginationComponent={CustomPagination}
-					data={store.allData?.filter((item) => {
+					data={store.data?.filter((item) => {
 						if (searchTerm === '') {
 							return item;
 						} else if (
@@ -322,10 +325,7 @@ const UsersList = () => {
 							item?.last_name
 								.toLowerCase()
 								.includes(searchTerm.toLowerCase()) ||
-							item?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-							item?.phone_number
-								.toLowerCase()
-								.includes(searchTerm.toLowerCase())
+							item?.email.toLowerCase().includes(searchTerm.toLowerCase())
 						) {
 							return item;
 						}

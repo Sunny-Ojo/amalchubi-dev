@@ -1,6 +1,6 @@
 // ** React Imports
 import { useState, useEffect, Fragment } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 
 // ** Store & Actions
 import { getProfession } from '../store/action';
@@ -28,18 +28,14 @@ import {
 // ** Styles
 import '@styles/react/apps/app-users.scss';
 import { AvForm, AvInput } from 'availity-reactstrap-validation-safe';
+import { addProfessionUrl } from '../../../router/api-routes';
+import { swal } from '../../../utility/Utils';
+import axiosClient from '../../../services/axios';
 
-const onSubmit = (event, errors) => {
-	if (!errors.length) {
-		console.log(event);
-		// toggleSidebar();
-	}
-	event.preventDefault();
-};
 const AddProfession = () => {
 	const [profession, setProfession] = useState({
-		name: '',
-		description: '',
+		title: '',
+		content: '',
 		status: '',
 	});
 
@@ -47,10 +43,38 @@ const AddProfession = () => {
 		const { name, value } = e.target;
 		setProfession({ ...profession, [name]: value });
 	}; // ** Function to toggle tabs
-	// ** States & Vars
+
+	const history = useHistory();
 	const dispatch = useDispatch();
-	// ** Function to toggle tabs
-	// ** Function to get user on mount
+	const [isSbumitting, setIsSbumitting] = useState(false);
+	const onSubmit = async (event, errors) => {
+		if (!errors.length) {
+			event.preventDefault();
+			const formData = new FormData();
+			setIsSbumitting(true);
+			formData.append('title', profession?.title);
+			formData.append('description', profession?.content);
+			formData.append('status', profession?.status);
+			try {
+				const response = await axiosClient.post(addProfessionUrl, formData);
+
+				if (response?.status === 201 || 200) {
+					swal('Great job!', 'Profession has been created', 'success');
+					history.push(`/professions/list`);
+				} else {
+					swal(
+						'Oops!',
+						"if you aren't redirected, something wrong must have happened",
+						'error'
+					);
+				}
+			} catch (error) {
+				setIsSbumitting(false);
+				swal('Oops!', error?.response?.data?.message, 'error');
+				console.error(error);
+			}
+		}
+	};
 
 	return (
 		<Fragment>
@@ -67,12 +91,11 @@ const AddProfession = () => {
 								<Row>
 									<Col md="6">
 										<FormGroup>
-											<Label for="name">Name</Label>
+											<Label for="title">Title</Label>
 											<AvInput
-												name="name"
-												id="name"
+												name="title"
+												id="title"
 												placeholder="Doctor"
-												value={profession.name}
 												onChange={(e) => handleChangeInput(e)}
 												required
 											/>
@@ -89,9 +112,6 @@ const AddProfession = () => {
 												required
 												onChange={(e) => handleChangeInput(e)}
 											>
-												<option value={profession.status}>
-													{profession.status}
-												</option>
 												<option value="false">False</option>
 												<option value="true">True</option>
 											</AvInput>
@@ -99,13 +119,12 @@ const AddProfession = () => {
 									</Col>
 									<Col md="12">
 										<FormGroup>
-											<Label for="description">Description</Label>
+											<Label for="content">Content</Label>
 											<AvInput
-												name="description"
-												id="description"
-												value={profession.description}
+												name="content"
+												id="content"
 												onChange={(e) => handleChangeInput(e)}
-												placeholder="Description for profession"
+												placeholder="Content for profession"
 												required
 												type="textarea"
 											/>
@@ -113,7 +132,9 @@ const AddProfession = () => {
 									</Col>
 									<Col>
 										<Button.Ripple color="primary">
-											Create Profession
+											{isSbumitting
+												? 'Creating Profession'
+												: 'Create Profession'}
 										</Button.Ripple>
 									</Col>
 								</Row>

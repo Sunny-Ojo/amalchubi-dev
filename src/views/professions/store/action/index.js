@@ -6,36 +6,31 @@ const MySwal = withReactContent(Swal);
 
 import { swal } from '@utils';
 import axiosClient from '../../../../services/axios';
+import { listProfessionsUrl } from '../../../../router/api-routes';
 // ** Get all Data
-const professions = [
-	{ id: 1, name: 'fvvsd', description: 'gvsdfgffg', status: 'true' },
-	{ id: 2, name: 'fvdvd', description: 'gfgfdfbdregfg', status: 'true' },
-	{ id: 3, name: 'fvfd', description: 'gfgffgvdv', status: 'true' },
-	{ id: 4, name: 'fvsdvsdv', description: 'gfgffg', status: 'true' },
-	{ id: 5, name: 'fvvsd', description: 'gfgfdvfdfg', status: 'true' },
-	{ id: 6, name: 'fvf', description: 'gfgsfdvffg', status: 'false' },
-];
+
 export const getAllData = () => {
 	return async (dispatch) => {
-		await axios.get('/api/users/list/all-data').then((response) => {
+		try {
+			const { data } = await axiosClient(listProfessionsUrl);
 			dispatch({
 				type: 'GET_ALL_DATA',
-				// data: response.data,
-				data: professions,
+				data: data?.message?.professions,
 			});
-		});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 };
 
 // ** Get data on page or row change
 export const getData = (params) => {
 	return async (dispatch) => {
-		await axios.get('/api/users/list/data', params).then((response) => {
+		await axiosClient(listProfessionsUrl, params).then((response) => {
 			dispatch({
 				type: 'GET_DATA',
-				// data: response.data.users,
-				data: professions,
-				totalPages: response.data.total,
+				data: response?.message?.users,
+				totalPages: response?.message?.totalItems,
 				params,
 			});
 		});

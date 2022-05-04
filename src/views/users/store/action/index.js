@@ -6,46 +6,57 @@ const MySwal = withReactContent(Swal);
 
 import { swal } from '@utils';
 import axiosClient from '../../../../services/axios';
-import { deleteUserUrl } from '../../../../router/api-routes';
+import {
+	deleteUserUrl,
+	listUsersUrl,
+	viewUserUrl,
+} from '../../../../router/api-routes';
 // ** Get all Data
 export const getAllData = () => {
 	return async (dispatch) => {
-		await axios.get('http://localhost:4000/users').then((response) => {
+		try {
+			const { data } = await axiosClient(listUsersUrl);
 			dispatch({
 				type: 'GET_ALL_DATA',
-				data: response.data,
+				data: data?.message?.users,
 			});
-		});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 };
 
 // ** Get data on page or row change
 export const getData = (params) => {
 	return async (dispatch) => {
-		await axios.get('http://localhost:4000/users', params).then((response) => {
+		try {
+			const { data } = await axiosClient(
+				listUsersUrl + `?page=${params?.page}`
+			);
 			dispatch({
 				type: 'GET_DATA',
-				data: response.data,
-				totalPages: response.data.length,
+				data: data?.message?.users,
+				totalPages: data?.message?.totalItems,
 				params,
 			});
-		});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 };
 
 // ** Get User
 export const getUser = (id) => {
 	return async (dispatch) => {
-		await axios
-			// .get(`http://localhost/users/${id}`, { id })
-			.get(`http://127.0.0.1:4000/users/${id}`)
-			.then((response) => {
-				dispatch({
-					type: 'GET_USER',
-					selectedUser: response.data,
-				});
-			})
-			.catch((err) => console.log(err));
+		try {
+			const { data } = await axiosClient(viewUserUrl(id));
+			dispatch({
+				type: 'GET_USER',
+				selectedUser: data?.message,
+			});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 };
 

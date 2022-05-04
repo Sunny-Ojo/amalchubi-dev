@@ -6,91 +6,52 @@ const MySwal = withReactContent(Swal);
 
 import { swal } from '@utils';
 import axiosClient from '../../../../services/axios';
+import { getBlogDetailsUrl, listBlogsUrl } from '../../../../router/api-routes';
 // ** Get all Data
-const blog = [
-	{
-		id: 1,
-		title: 'Cooking',
-		content: '<p><b>gvsdfgffg</b></p>',
-		published_at: '12-123',
-		expired_at: null,
-	},
-	{
-		id: 2,
-		title: 'fvdvd',
-		content: 'gfgfdfbdregfg',
-		published_at: '12-123',
-		expired_at: null,
-	},
-	{
-		id: 3,
-		title: 'fvfd',
-		content: 'gfgffgvdv',
-		published_at: '12-123',
-		expired_at: null,
-	},
-	{
-		id: 4,
-		title: 'fvsdvsdv',
-		content: 'gfgffg',
-		published_at: '12-123',
-		expired_at: null,
-	},
-	{
-		id: 5,
-		title: 'fvvsd',
-		content: 'gfgfdvfdfg',
-		published_at: '12-123',
-		expired_at: null,
-	},
-	{
-		id: 6,
-		title: 'fvf',
-		content: 'gfgsfdvffg',
-		published_at: '12-123',
-		expired_at: null,
-	},
-];
+
 export const getAllData = () => {
 	return async (dispatch) => {
-		await axios.get('/api/users/list/all-data').then((response) => {
+		try {
+			const { data } = await axiosClient(listBlogsUrl);
 			dispatch({
 				type: 'GET_ALL_DATA',
-				// data: response.data,
-				data: blog,
+				data: data?.message?.blogs,
 			});
-		});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 };
 
 // ** Get data on page or row change
 export const getData = (params) => {
 	return async (dispatch) => {
-		await axios.get('/api/users/list/data', params).then((response) => {
+		try {
+			const { data } = await axiosClient(listBlogsUrl, params);
 			dispatch({
 				type: 'GET_DATA',
-				// data: response.data.users,
-				data: blog,
-				// totalPages: response.data.total,
-				totalPages: blog.length,
+				data: data?.message?.blogs,
+				totalPages: blog?.message?.length,
 				params,
 			});
-		});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 };
 
 // ** Get User
 export const getBlog = (id) => {
 	return async (dispatch) => {
-		await axios
-			.get('/api/users/user', { id })
-			.then((response) => {
-				dispatch({
-					type: 'GET_BLOG',
-					selectedBlog: blog.filter((pro) => pro.id === id)?.[0] || {},
-				});
-			})
-			.catch((err) => console.log(err));
+		try {
+			const { data } = await axiosClient(getBlogDetailsUrl(id));
+			dispatch({
+				type: 'GET_BLOG',
+				selectedBlog: data?.message,
+			});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 };
 
