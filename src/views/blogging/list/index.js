@@ -38,12 +38,17 @@ import {
 } from 'reactstrap';
 
 import '@styles/base/pages/page-blog.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllData } from '../store/action';
 
 const BlogList = () => {
 	const [data, setData] = useState(null);
 
+	const dispatch = useDispatch();
+	const store = useSelector((state) => state.blogs);
 	useEffect(() => {
-		axios.get('/blog/list/data').then((res) => setData(res.data));
+		dispatch(getAllData());
+		setData(store?.allData);
 	}, []);
 
 	const badgeColorsArr = {
@@ -76,11 +81,11 @@ const BlogList = () => {
 			return (
 				<Col key={item.title} md="4">
 					<Card>
-						<Link to={`/blogs/view/${item.id}`}>
+						<Link to={`/blogs/view/${item?._id}`}>
 							<CardImg
 								className="img-fluid"
-								src={item.img}
-								alt={item.title}
+								src={item?.img || 'https://source.unsplash.com/random'}
+								alt={item?.title}
 								top
 							/>
 						</Link>
@@ -88,19 +93,19 @@ const BlogList = () => {
 							<CardTitle tag="h4">
 								<Link
 									className="blog-title-truncate text-body-heading"
-									to={`/pages/blog/detail/${item.id}`}
+									to={`/pages/blog/detail/${item?._id}`}
 								>
-									{item.title}
+									{item?.title}
 								</Link>
 							</CardTitle>
-							<Media>
+							{/* 	<Media>
 								<Avatar
 									className="mr-50"
-									img={item.avatar}
+									img={item?.avatar}
 									imgHeight="24"
 									imgWidth="24"
 								/>
-								<Media body>
+							<Media body>
 									<small className="text-muted mr-25">by</small>
 									<small>
 										<a
@@ -108,28 +113,28 @@ const BlogList = () => {
 											href="/"
 											onClick={(e) => e.preventDefault()}
 										>
-											{item.userFullName}
+											{item?.userFullName}
 										</a>
 									</small>
 									<span className="text-muted ml-50 mr-25">|</span>
-									<small className="text-muted">{item.blogPosted}</small>
+									<small className="text-muted">{item?.blogPosted}</small>
 								</Media>
-							</Media>
-							<div className="my-1 py-25">{renderTags()}</div>
+							</Media> */}
+							{/* <div className="my-1 py-25">{renderTags()}</div> */}
 							<CardText className="blog-content-truncate">
-								{item.excerpt}
+								{item?.content}
 							</CardText>
 							<hr />
-							<div className="d-flex justify-content-between align-items-center">
-								<Link to={`/pages/blog/detail/${item.id}`}>
+							<div className="d-flex justify-content-center align-items-center">
+								{/* <Link to={`/pages/blog/detail/${item?._id}`}>
 									<MessageSquare size={15} className="text-body mr-50" />
 									<span className="text-body font-weight-bold">
-										{item.comment} Comments
+										{item?.comment} Comments
 									</span>
-								</Link>
+								</Link> */}
 								<Link
-									className="font-weight-bold"
-									to={`/pages/blog/detail/${item.id}`}
+									className="font-weight-bold btn btn-primary"
+									to={`/pages/blog/detail/${item?._id}`}
 								>
 									Read More
 								</Link>
@@ -159,68 +164,6 @@ const BlogList = () => {
 									<Col sm="12">
 										<Pagination className="d-flex justify-content-center mt-2">
 											<PaginationItem className="prev-item">
-												<PaginationLink
-													href="#"
-													onClick={(e) => e.preventDefault()}
-												></PaginationLink>
-											</PaginationItem>
-											<PaginationItem>
-												<PaginationLink
-													href="#"
-													onClick={(e) => e.preventDefault()}
-												>
-													1
-												</PaginationLink>
-											</PaginationItem>
-											<PaginationItem>
-												<PaginationLink
-													href="#"
-													onClick={(e) => e.preventDefault()}
-												>
-													2
-												</PaginationLink>
-											</PaginationItem>
-											<PaginationItem>
-												<PaginationLink
-													href="#"
-													onClick={(e) => e.preventDefault()}
-												>
-													3
-												</PaginationLink>
-											</PaginationItem>
-											<PaginationItem active>
-												<PaginationLink
-													href="#"
-													onClick={(e) => e.preventDefault()}
-												>
-													4
-												</PaginationLink>
-											</PaginationItem>
-											<PaginationItem>
-												<PaginationLink
-													href="#"
-													onClick={(e) => e.preventDefault()}
-												>
-													5
-												</PaginationLink>
-											</PaginationItem>
-											<PaginationItem>
-												<PaginationLink
-													href="#"
-													onClick={(e) => e.preventDefault()}
-												>
-													6
-												</PaginationLink>
-											</PaginationItem>
-											<PaginationItem>
-												<PaginationLink
-													href="#"
-													onClick={(e) => e.preventDefault()}
-												>
-													7
-												</PaginationLink>
-											</PaginationItem>
-											<PaginationItem className="next-item">
 												<PaginationLink
 													href="#"
 													onClick={(e) => e.preventDefault()}

@@ -46,7 +46,14 @@ const renderClient = (row) => {
 		color = states[stateNum];
 
 	if (row?.avatar?.length) {
-		return <Avatar className="mr-1" img={row.avatar} width="32" height="32" />;
+		return (
+			<Avatar
+				className="mr-1"
+				img={`http://${row.avatar}`}
+				width="32"
+				height="32"
+			/>
+		);
 	} else {
 		return (
 			<Avatar
@@ -102,6 +109,10 @@ const statusObj = {
 	active: 'light-success',
 	inactive: 'light-secondary',
 	blocked: 'light-danger',
+	3: 'light-warning',
+	1: 'light-success',
+	0: 'light-secondary',
+	2: 'light-danger',
 };
 const handleDeleteUser = (id) => {
 	return async () => {
@@ -154,9 +165,9 @@ export const columns = [
 				{renderClient(row)}
 				<div className="d-flex flex-column">
 					<Link
-						to={`/user/view/${row.id}`}
+						to={`/user/view/${row._id}`}
 						className="user-name text-truncate mb-0"
-						onClick={() => store.dispatch(getUser(row.id))}
+						onClick={() => store.dispatch(getUser(row._id))}
 					>
 						<span className="font-weight-bold">{`${row.first_name} ${row.last_name}`}</span>
 					</Link>
@@ -171,13 +182,13 @@ export const columns = [
 		sortable: true,
 		cell: (row) => row.email || '-',
 	},
-	{
-		name: 'Phone Number',
-		minWidth: '172px',
-		selector: 'role',
-		sortable: true,
-		cell: (row) => row.phone_number || '-',
-	},
+	// {
+	// 	name: 'Phone Number',
+	// 	minWidth: '172px',
+	// 	selector: 'role',
+	// 	sortable: true,
+	// 	cell: (row) => row.phone_number || '-',
+	// },
 
 	{
 		name: 'Status',
@@ -187,7 +198,7 @@ export const columns = [
 		cell: (row) => (
 			<Badge
 				className="text-capitalize"
-				color={statusObj[row?.status || '-']}
+				color={statusObj[row?.status || 'secondary']}
 				pill
 			>
 				{row?.status || '-'}
@@ -207,26 +218,27 @@ export const columns = [
 				<DropdownMenu right>
 					<DropdownItem
 						tag={Link}
-						to={`/user/view/${row.id}`}
+						to={'#'}
+						// to={`/user/view/${row._id}`}
 						className="w-100"
-						onClick={() => store.dispatch(getUser(row.id))}
+						onClick={() => store.dispatch(getUser(row._id))}
 					>
 						<FileText size={14} className="mr-50" />
 						<span className="align-middle">Details</span>
 					</DropdownItem>
-					<DropdownItem
+					{/* <DropdownItem
 						tag={Link}
-						to={`/user/edit/${row.id}`}
+						to={`/user/edit/${row._id}`}
 						className="w-100"
-						onClick={() => store.dispatch(getUser(row.id))}
+						onClick={() => store.dispatch(getUser(row._id))}
 					>
 						<Archive size={14} className="mr-50" />
 						<span className="align-middle">Edit</span>
-					</DropdownItem>
-					<DropdownItem className="w-100" onClick={handleDeleteUser(row.id)}>
+					</DropdownItem> */}
+					{/* <DropdownItem className="w-100" onClick={handleDeleteUser(row._id)}>
 						<Trash2 size={14} className="mr-50" />
 						<span className="align-middle">Delete</span>
-					</DropdownItem>
+					</DropdownItem> */}
 				</DropdownMenu>
 			</UncontrolledDropdown>
 		),

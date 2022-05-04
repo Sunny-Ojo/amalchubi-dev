@@ -1,12 +1,15 @@
 import axios from 'axios';
-
+const accessToken = JSON.parse(localStorage.getItem('userData'))?.accessToken;
+const refreshToken = JSON.parse(localStorage.getItem('userData'))?.refreshToken;
 const axiosClient = axios.create({
 	baseURL: process.env.REACT_APP_API_URL,
-	// baseURL: 'https://back.happymall.ng/api',
 	headers: {
+		Authorization: `Bearer ${accessToken}`,
+		'x-refresh-token': `${refreshToken}`,
+		Accept: 'application/json',
 		'Content-Type': 'application/json',
-		// 'Authorization': `Bearer ${cookie.get('jwt')}`
 	},
+	responseType: 'json',
 });
 
 export default axiosClient;

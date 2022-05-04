@@ -40,14 +40,18 @@ import {
 } from 'reactstrap';
 
 import '@styles/base/pages/page-blog.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { getBlog } from '../../../blogging/store/action';
 
 const BlogDetails = () => {
 	const [data, setData] = useState(null);
-	// const { id } = useParams();
-	useEffect(() => {
-		// alert(id);
-		axios.get('/blog/list/data/detail').then((res) => setData(res.data));
-	}, []);
+	const dispatch = useDispatch();
+	const store = useSelector((state) => state.blogs);
+	const { id } = useParams();
+	useEffect(async () => {
+		await dispatch(getBlog(id));
+		setData(store?.selectedBlog);
+	}, [id]);
 
 	const badgeColorsArr = {
 		Quote: 'light-info',
@@ -122,10 +126,10 @@ const BlogDetails = () => {
 							<Row>
 								<Col sm="12">
 									<Card className="mb-3">
-										<CardImg src={data.blog.img} className="img-fluid" top />
+										<CardImg src={data?.img} className="img-fluid" top />
 										<CardBody>
-											<CardTitle tag="h4">{data.blog.title}</CardTitle>
-											<Media>
+											<CardTitle tag="h4">{data?.title}</CardTitle>
+											{/* <Media>
 												<Avatar
 													className="mr-50"
 													img={data.blog.avatar}
@@ -145,17 +149,17 @@ const BlogDetails = () => {
 													</small>
 													<span className="text-muted ml-50 mr-25">|</span>
 													<small className="text-muted">
-														{data.blog.createdTime}
+														{data?.blog?.createdTime}
 													</small>
 												</Media>
-											</Media>
-											<div className="my-1 py-25">{renderTags()}</div>
+											</Media> */}
+											{/* <div className="my-1 py-25">{renderTags()}</div> */}
 											<div
 												dangerouslySetInnerHTML={{
-													__html: data.blog.content,
+													__html: data?.content,
 												}}
 											></div>
-											<Media>
+											{/* <Media>
 												<Avatar
 													img={cmtImg}
 													className="mr-2"
@@ -171,7 +175,7 @@ const BlogDetails = () => {
 														designer around the world.
 													</CardText>
 												</Media>
-											</Media>
+											</Media> */}
 											<hr className="my-2" />
 											<div className="d-flex align-items-center justify-content-between">
 												<div className="d-flex align-items-center">
@@ -188,7 +192,7 @@ const BlogDetails = () => {
 														</a>
 														<a href="/" onClick={(e) => e.preventDefault()}>
 															<div className="text-body align-middle">
-																{kFormatter(data.blog.comments)}
+																{kFormatter(data?.comments)}
 															</div>
 														</a>
 													</div>
@@ -205,7 +209,7 @@ const BlogDetails = () => {
 														</a>
 														<a href="/" onClick={(e) => e.preventDefault()}>
 															<div className="text-body align-middle">
-																{data.blog.bookmarked}
+																{/* {data.blog.bookmarked} */}
 															</div>
 														</a>
 													</div>
@@ -240,8 +244,8 @@ const BlogDetails = () => {
 									</Card>
 								</Col>
 								<Col sm="12">
-									<h6 className="section-label">Comment</h6>
-									{renderComments()}
+									<h6 className="section-label">Comments</h6>
+									{/* {renderComments()} */}
 								</Col>
 								<Col sm="12">
 									<h6 className="section-label">Leave a Comment</h6>
@@ -262,20 +266,7 @@ const BlogDetails = () => {
 															<Input type="email" placeholder="Email" />
 														</FormGroup>
 													</Col>
-													<Col sm="6">
-														<FormGroup className="mb-2">
-															<Input type="url" placeholder="Website" />
-														</FormGroup>
-													</Col>
-													<Col sm="12">
-														<FormGroup className="mb-2">
-															<Input
-																className="mb-2"
-																type="textarea"
-																placeholder="Comment"
-															/>
-														</FormGroup>
-													</Col>
+
 													<Col sm="12">
 														<Input
 															className="mb-2"
@@ -306,7 +297,7 @@ const BlogDetails = () => {
 						) : null}
 					</div>
 				</div>
-				<Sidebar />
+				{/* <Sidebar /> */}
 			</div>
 		</Fragment>
 	);

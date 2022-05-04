@@ -32,6 +32,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { swal } from '../../../utility/Utils';
 import EditorInline from '../../forms/form-elements/editor/EditorInline';
 import EditorFullFeatured from '../../forms/form-elements/editor/EditorFullFeatured';
+import ImageUploader from '../../../services/ImageUploader';
 
 const onSubmit = (event, errors) => {
 	if (!errors.length) {
@@ -47,6 +48,7 @@ const AddBlog = () => {
 
 	const [newBlog, setNewBlog] = useState({
 		title: '',
+		image: '',
 		published_at: '',
 		expired_at: '',
 	});
@@ -67,6 +69,9 @@ const AddBlog = () => {
 		history.push('/blogs/list');
 	}; // ** Function to toggle tabs
 
+	const handleChangeImage = (data) => {
+		setNewBlog({ ...newBlog, image: data });
+	};
 	// ** States & Vars
 	const dispatch = useDispatch();
 	// ** Function to toggle tabs
@@ -149,15 +154,15 @@ const AddBlog = () => {
 												content_css: skin === 'dark' ? 'dark' : undefined,
 											}}
 										/>
-										{/* <AvInput
-											name="content"
-											id="content"
-											value={newBlog.content}
-											onChange={(e) => handleChangeInput(e)}
-											placeholder="Content for the blog"
-											required
-											type="textarea"
-										/> */}
+									</FormGroup>
+								</Col>
+								<Col md="12">
+									<FormGroup>
+										{/* <Label for="logo">Featured Image</Label> */}
+										<ImageUploader
+											title="Featured Image"
+											handleChangeImage={handleChangeImage}
+										/>
 									</FormGroup>
 								</Col>
 								<Col>
