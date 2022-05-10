@@ -1,6 +1,9 @@
 {
 	"name": "amalhubi-admin-dashboard",
 	"version": "6.3.0",
+	"engines": {
+		"node": "16.x"
+	},
 	"private": true,
 	"dependencies": {
 		"@casl/ability": "4.1.6",
@@ -96,10 +99,6 @@
 	},
 	"eslintConfig": {
 		"extends": "react-app"
-	},
-	"engines": {
-		"node": "14.16.0",
-		"npm": "8.1.2"
 	},
 	"devDependencies": {
 		"@types/sortablejs": "^1.10.6",
