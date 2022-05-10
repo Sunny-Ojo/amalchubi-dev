@@ -149,7 +149,6 @@ const PostDetails = () => {
 			<Breadcrumbs
 				breadCrumbTitle="Professions Details"
 				breadCrumbParent="Profession"
-				// breadCrumbParent2="Blog"
 				breadCrumbActive="Details"
 			/>
 			<div className="blog-wrapper">
