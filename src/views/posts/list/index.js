@@ -46,7 +46,6 @@ import {
 	listBlogsUrl,
 	listPostPagesUrl,
 	listPostsUrl,
-	listProfessionsUrl,
 } from '../../../router/api-routes';
 
 const PostList = () => {
@@ -57,7 +56,7 @@ const PostList = () => {
 	const store = useSelector((state) => state.blogs);
 	const getBlogs = async () => {
 		try {
-			const { data } = await axiosClient(listProfessionsUrl);
+			const { data } = await axiosClient(listPostsUrl);
 			setData(data?.message);
 		} catch (error) {
 			console.error(error);
@@ -95,7 +94,7 @@ const PostList = () => {
 		Food: 'light-success',
 	};
 	const renderRenderList = () => {
-		return data?.professions?.map((item) => {
+		return data?.posts?.map((item) => {
 			const renderTags = () => {
 				return item.tags.map((tag, index) => {
 					return (
@@ -117,7 +116,7 @@ const PostList = () => {
 			return (
 				<Col key={item.title} md="4">
 					<Card>
-						<Link to={`/professions/view/${item?._id}`}>
+						<Link to={`/post/view/${item?._id}`}>
 							<CardImg
 								className="img-fluid"
 								src={item?.img || 'https://source.unsplash.com/random'}
@@ -129,7 +128,7 @@ const PostList = () => {
 							<CardTitle tag="h4">
 								<Link
 									className="blog-title-truncate text-body-heading"
-									to={`/professions/view/${item?._id}`}
+									to={`/post/view/${item?._id}`}
 								>
 									{item?.title}
 								</Link>
@@ -158,7 +157,7 @@ const PostList = () => {
 							</Media> */}
 							{/* <div className="my-1 py-25">{renderTags()}</div> */}
 							<CardText className="blog-content-truncate">
-								<div dangerouslySetInnerHTML={{ __html: item?.description }} />
+								<div dangerouslySetInnerHTML={{ __html: item?.content }} />
 							</CardText>
 							<hr />
 							<div className="d-flex justify-content-center align-items-center">
@@ -170,9 +169,9 @@ const PostList = () => {
 								</Link> */}
 								<Link
 									className="font-weight-bold btn btn-primary"
-									to={`/professions/view/${item?._id}`}
+									to={`/post/view/${item?._id}`}
 								>
-									View Details
+									Read More
 								</Link>
 							</div>
 						</CardBody>
@@ -185,14 +184,15 @@ const PostList = () => {
 	return (
 		<Fragment>
 			<Breadcrumbs
-				breadCrumbTitle="Professions"
-				breadCrumbParent="Professions Management"
+				breadCrumbTitle="Posts List"
+				// breadCrumbParent="Pages"
+				breadCrumbParent="Posts"
 				breadCrumbActive="List"
 			/>
 			<div className="blog-wrapper">
 				<div className="content-dtached content-lft">
 					<div className="content-body">
-						{data?.professions !== null ? (
+						{data?.posts !== null ? (
 							<div className="blog-list-wrapper">
 								<Row>{renderRenderList()}</Row>
 								<Row>

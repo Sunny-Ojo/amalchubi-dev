@@ -234,11 +234,11 @@ const AddUser = (props) => {
 
 							<Col md="6">
 								<FormGroup>
-									<Label for="user-role">User Role</Label>
+									<Label for="role">User Role</Label>
 									<AvInput
 										onChange={(e) => handleChangeInput(e)}
 										type="select"
-										id="user-role"
+										id="role"
 										name="role"
 										// required
 									>

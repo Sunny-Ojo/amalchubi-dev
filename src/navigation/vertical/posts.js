@@ -1,13 +1,4 @@
-import {
-	Mail,
-	MessageSquare,
-	CheckSquare,
-	Calendar,
-	FileText,
-	Circle,
-	ShoppingCart,
-	User,
-} from 'react-feather';
+import { Circle } from 'react-feather';
 
 export default [
 	// {
@@ -22,20 +13,14 @@ export default [
 				id: 'postsList',
 				title: 'List',
 				permissions: ['admin', 'editor'],
-				navLink: '/pages/blog/list',
+				navLink: '/posts/list',
 			},
 			{
 				id: 'newPost',
 				title: 'Add New',
 				permissions: ['admin', 'editor'],
-				navLink: '/pages/blog/detail',
+				navLink: '/posts/add',
 			},
-			// {
-			// 	id: 'blogEdit',
-			// 	title: 'Edit',
-			// 	permissions: ['admin', 'editor'],
-			// 	navLink: '/pages/blog/edit',
-			// },
 		],
 	},
 ];

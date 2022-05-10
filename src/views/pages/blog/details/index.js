@@ -16,6 +16,8 @@ import {
 	Twitter,
 	Linkedin,
 	CornerUpLeft,
+	Trash,
+	PenTool,
 } from 'react-feather';
 import Breadcrumbs from '@components/breadcrumbs';
 import {
@@ -42,15 +44,26 @@ import {
 import '@styles/base/pages/page-blog.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBlog } from '../../../blogging/store/action';
+import axiosClient from '../../../../services/axios';
+import { getBlogDetailsUrl } from '../../../../router/api-routes';
 
 const BlogDetails = () => {
-	const [data, setData] = useState(null);
-	const dispatch = useDispatch();
-	const store = useSelector((state) => state.blogs);
+	const [data, setData] = useState();
+	// const dispatch = useDispatch();
+	// const store = useSelector((state) => state.blogs);
 	const { id } = useParams();
-	useEffect(async () => {
-		await dispatch(getBlog(id));
-		setData(store?.selectedBlog);
+	const getBlog = async () => {
+		try {
+			const { data } = await axiosClient(getBlogDetailsUrl(id));
+			console.log(data);
+			setData(data?.message);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		getBlog();
 	}, [id]);
 
 	const badgeColorsArr = {
@@ -180,16 +193,12 @@ const BlogDetails = () => {
 											<div className="d-flex align-items-center justify-content-between">
 												<div className="d-flex align-items-center">
 													<div className="d-flex align-items-center mr-1">
-														<a
-															className="mr-50"
-															href="/"
-															onClick={(e) => e.preventDefault()}
-														>
-															<MessageSquare
+														<Link to={`/blogs/edit/${data?.id}`}>
+															<PenTool
 																size={21}
 																className="text-body align-middle"
 															/>
-														</a>
+														</Link>
 														<a href="/" onClick={(e) => e.preventDefault()}>
 															<div className="text-body align-middle">
 																{kFormatter(data?.comments)}
@@ -202,9 +211,10 @@ const BlogDetails = () => {
 															href="/"
 															onClick={(e) => e.preventDefault()}
 														>
-															<Bookmark
+															<Trash
+																title="Delete"
 																size={21}
-																className="text-body align-middle"
+																className="text-body align-middle text-danger"
 															/>
 														</a>
 														<a href="/" onClick={(e) => e.preventDefault()}>

@@ -40,15 +40,45 @@ import {
 import '@styles/base/pages/page-blog.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllData } from '../store/action';
+import axiosClient from '../../../services/axios';
+import { listBlogPagesUrl, listBlogsUrl } from '../../../router/api-routes';
 
 const BlogList = () => {
-	const [data, setData] = useState(null);
+	const [data, setData] = useState([]);
+	const [currentPage, setCurrentPage] = useState(1);
 
 	const dispatch = useDispatch();
 	const store = useSelector((state) => state.blogs);
+	const getBlogs = async () => {
+		try {
+			const { data } = await axiosClient(listBlogsUrl);
+			setData(data?.message);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+	const handleNextPage = async () => {
+		// const newPage = type == 'next' ? currentPage + 1 : currentPage - 1;
+		setCurrentPage(currentPage + 1);
+		try {
+			const { data } = await axiosClient(listBlogPagesUrl(currentPage + 1));
+			setData(data?.message);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+	const handlePreviousPage = async () => {
+		// const newPage = type == 'next' ? currentPage + 1 : currentPage - 1;
+		setCurrentPage(currentPage - 1);
+		try {
+			const { data } = await axiosClient(listBlogPagesUrl(currentPage - 1));
+			setData(data?.message);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 	useEffect(() => {
-		dispatch(getAllData());
-		setData(store?.allData);
+		getBlogs();
 	}, []);
 
 	const badgeColorsArr = {
@@ -59,7 +89,7 @@ const BlogList = () => {
 		Food: 'light-success',
 	};
 	const renderRenderList = () => {
-		return data.map((item) => {
+		return data?.blogs?.map((item) => {
 			const renderTags = () => {
 				return item.tags.map((tag, index) => {
 					return (
@@ -83,6 +113,7 @@ const BlogList = () => {
 					<Card>
 						<Link to={`/blogs/view/${item?._id}`}>
 							<CardImg
+								style={{ height: '200px !important', width: '100%' }}
 								className="img-fluid"
 								src={item?.img || 'https://source.unsplash.com/random'}
 								alt={item?.title}
@@ -93,7 +124,7 @@ const BlogList = () => {
 							<CardTitle tag="h4">
 								<Link
 									className="blog-title-truncate text-body-heading"
-									to={`/pages/blog/detail/${item?._id}`}
+									to={`/blogs/view/${item?._id}`}
 								>
 									{item?.title}
 								</Link>
@@ -122,7 +153,7 @@ const BlogList = () => {
 							</Media> */}
 							{/* <div className="my-1 py-25">{renderTags()}</div> */}
 							<CardText className="blog-content-truncate">
-								{item?.content}
+								<div dangerouslySetInnerHTML={{ __html: item?.content }} />
 							</CardText>
 							<hr />
 							<div className="d-flex justify-content-center align-items-center">
@@ -134,7 +165,7 @@ const BlogList = () => {
 								</Link> */}
 								<Link
 									className="font-weight-bold btn btn-primary"
-									to={`/pages/blog/detail/${item?._id}`}
+									to={`/blogs/view/${item?._id}`}
 								>
 									Read More
 								</Link>
@@ -157,18 +188,45 @@ const BlogList = () => {
 			<div className="blog-wrapper">
 				<div className="content-dtached content-lft">
 					<div className="content-body">
-						{data !== null ? (
+						{data?.blogs !== null ? (
 							<div className="blog-list-wrapper">
 								<Row>{renderRenderList()}</Row>
 								<Row>
 									<Col sm="12">
 										<Pagination className="d-flex justify-content-center mt-2">
-											<PaginationItem className="prev-item">
+											{data?.hasPreviousPage && (
+												<PaginationItem className="prev-item">
+													<PaginationLink
+														href="#"
+														onClick={handlePreviousPage}
+													></PaginationLink>
+												</PaginationItem>
+											)}
+											{/* <PaginationItem>
 												<PaginationLink
 													href="#"
 													onClick={(e) => e.preventDefault()}
-												></PaginationLink>
-											</PaginationItem>
+												>
+													1
+												</PaginationLink>
+											</PaginationItem> */}
+											{data?.hasNextPage && (
+												<PaginationItem className="next-item">
+													<PaginationLink
+														href="#"
+														onClick={handleNextPage}
+													></PaginationLink>
+												</PaginationItem>
+											)}
+
+											{/* <PaginationItem active>
+												<PaginationLink
+													href="#"
+													onClick={(e) => e.preventDefault()}
+												>
+													4
+												</PaginationLink>
+											</PaginationItem> */}
 										</Pagination>
 									</Col>
 								</Row>

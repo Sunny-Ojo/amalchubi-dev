@@ -9,6 +9,7 @@ import UserRoutes from './Users';
 import BlogRoutes from './Blog';
 import PagesRoutes from './Pages';
 import AppRoutes from './Apps';
+import PostRoutes from './Post';
 // ** Document title
 const TemplateTitle = '%s - Admin Dashboard';
 // ** Default Route
@@ -23,6 +24,7 @@ const Routes = [
 	...DashboardRoutes,
 	...UserRoutes,
 	...Users,
+	...PostRoutes,
 	...PagesRoutes,
 	// ...PagesRoutes,
 	// ...UiElementRoutes,

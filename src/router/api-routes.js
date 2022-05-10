@@ -18,16 +18,25 @@ export const viewUserUrl = (id) => `/api/user/${id}`;
 export const listUsersUrl = `/api/user`;
 
 //user api routes
-export const deleteProfessionsUrl = (id) =>
-	`${base_url}/admin/professions/delete/${id}`;
+export const deleteProfessionsUrl = (id) => `/api/profession/${id}`;
 export const updateProfessionsUrl = (id) =>
 	`${base_url}/admin/professions/update/${id}`;
-export const viewProfessionsUrl = (id) =>
-	`${base_url}/admin/professions/details/${id}`;
+export const viewProfessionsUrl = (id) => `/api/profession/${id}`;
 export const listProfessionsUrl = `/api/profession?status=true`;
 export const addProfessionUrl = `/api/profession`;
 
 //blogs
 export const listBlogsUrl = `/api/blog`;
+export const listBlogPagesUrl = (page) => `/api/blog?page=${page}`;
+export const deleteBlogUrl = (id) => `/api/blog/${id}`;
 export const addBlogUrl = `/api/blog`;
 export const getBlogDetailsUrl = (id) => `/api/blog/${id}`;
+export const updateBlogDetailsUrl = (id) => `/api/blog/${id}`;
+
+//posts
+export const listPostsUrl = `/api/post`;
+export const listPostPagesUrl = (page) => `/api/post?page=${page}`;
+export const deletePostUrl = (id) => `/api/post/${id}`;
+export const addPostUrl = `/api/post`;
+export const getPostDetailsUrl = (id) => `/api/post/${id}`;
+export const updatePostDetailsUrl = (id) => `/api/post/${id}`;
