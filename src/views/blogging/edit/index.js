@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
 
 // ** Store & Actions
-import { getBlog } from '../store/action';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSkin } from '@hooks/useSkin';
 
@@ -28,6 +27,11 @@ import { swal } from '../../../utility/Utils';
 import '@styles/react/apps/app-users.scss';
 import { AvForm, AvInput } from 'availity-reactstrap-validation-safe';
 import { Editor } from '@tinymce/tinymce-react';
+import {
+	getBlogDetailsUrl,
+	updateBlogDetailsUrl,
+} from '../../../router/api-routes';
+import axiosClient from '../../../services/axios';
 
 const BlogEdit = () => {
 	const history = useHistory();
@@ -36,12 +40,11 @@ const BlogEdit = () => {
 	// ** States & Vars
 	const [activeTab, setActiveTab] = useState('1'),
 		store = useSelector((state) => state.blogs),
-		dispatch = useDispatch(),
 		{ id } = useParams();
 
 	const [blog, setBlog] = useState({
-		title: store.selectedBlog?.title || '',
-		content: store.selectedBlog?.content || '',
+		title: '',
+		content: '',
 		// status: store.selectedBlog?.status || '',
 	});
 	const handleChangeInput = (e) => {
@@ -49,19 +52,42 @@ const BlogEdit = () => {
 		setBlog({ ...blog, [name]: value });
 	}; // ** Function to toggle tabs
 	const toggle = (tab) => setActiveTab(tab);
-
+	const getBlog = async () => {
+		try {
+			const { data } = await axiosClient(getBlogDetailsUrl(id));
+			console.log(data);
+			setBlog({
+				...blog,
+				title: data?.message?.title || '',
+				content: data?.message?.content || '',
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	// ** Function to get user on mount
 	useEffect(() => {
-		dispatch(getBlog(parseInt(id)));
-	}, [dispatch]);
-	const onSubmit = (event, errors) => {
+		getBlog();
+	}, [id]);
+	const onSubmit = async (event, errors) => {
 		if (!errors.length) {
-			swal(
-				'Successfully updated',
-				'Blog details has been updated successfully',
-				'success'
-			);
-			history.push('/blogs/list');
+			const updatedBlog = {
+				...blog,
+				content: tinymce.activeEditor.getContent(),
+			};
+
+			// make the axios call and save the blog
+			try {
+				const { data } = await axiosClient.put(
+					updateBlogDetailsUrl(id, { ...updatedBlog })
+				);
+				console.log(data);
+				swal('Success', ' Blog updated successfully', 'success');
+				history.push('/blogs/list');
+			} catch (error) {
+				swal('Error', error?.response?.data?.message, 'error');
+				console.log(error);
+			}
 		} else {
 			event.preventDefault();
 			swal(
@@ -71,7 +97,7 @@ const BlogEdit = () => {
 			);
 		}
 	};
-	return store.selectedBlog !== null && store.selectedBlog !== undefined ? (
+	return blog !== undefined ? (
 		<Row className="app-user-edit">
 			<Col sm="12">
 				<Card>
@@ -94,7 +120,7 @@ const BlogEdit = () => {
 											name="title"
 											id="title"
 											placeholder="Doctor"
-											value={blog.title}
+											value={blog?.title}
 											onChange={(e) => handleChangeInput(e)}
 											required
 										/>
@@ -103,6 +129,7 @@ const BlogEdit = () => {
 								<Col md="12">
 									<FormGroup>
 										<Label for="content">Content</Label>
+
 										<Editor
 											apiKey="emjshh1tafcjgizkmk6eofcmmcxc2cmugajs9l2ordjyca64"
 											initialValue={''}
@@ -111,7 +138,7 @@ const BlogEdit = () => {
 												selector: 'textarea#full-featured',
 												setup: function (editor) {
 													editor.on('init', function (e) {
-														editor.setContent(blog.content || '');
+														editor.setContent(blog?.content);
 													});
 												},
 												plugins:

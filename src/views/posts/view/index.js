@@ -44,31 +44,36 @@ import {
 import '@styles/base/pages/page-blog.scss';
 import { useDispatch, useSelector } from 'react-redux';
 // import { getBlog } from '../../../blogging/store/action';
-import { deleteBlogUrl, getBlogDetailsUrl } from '../../../router/api-routes';
+import {
+	deleteBlogUrl,
+	deletePostUrl,
+	getBlogDetailsUrl,
+	getPostDetailsUrl,
+} from '../../../router/api-routes';
 import axiosClient from '../../../services/axios';
 import { swal } from '../../../utility/Utils';
 
-const BlogDetails = () => {
+const PostDetails = () => {
 	const [data, setData] = useState();
 	const history = useHistory();
 	// const dispatch = useDispatch();
 	// const store = useSelector((state) => state.blogs);
 	const { id } = useParams();
-	const getBlog = async () => {
+	const getPost = async () => {
 		try {
-			const { data } = await axiosClient(getBlogDetailsUrl(id));
+			const { data } = await axiosClient(getPostDetailsUrl(id));
 			console.log(data);
 			setData(data?.message);
 		} catch (error) {
 			console.log(error);
 		}
 	};
-	const deleteBlog = async (id) => {
+	const deletePost = async (id) => {
 		try {
-			const { data } = await axiosClient.delete(deleteBlogUrl(id));
+			const { data } = await axiosClient.delete(deletePostUrl(id));
 			swal('Deleted!', 'Deleted successfully', 'success');
 
-			history.push('/blogs/list');
+			history.push('/posts/list');
 		} catch (error) {
 			swal('Error', error?.response?.data?.message, 'error');
 			console.log(error);
@@ -76,7 +81,7 @@ const BlogDetails = () => {
 	};
 
 	useEffect(() => {
-		getBlog();
+		getPost();
 	}, [id]);
 
 	const badgeColorsArr = {
@@ -140,9 +145,9 @@ const BlogDetails = () => {
 	return (
 		<Fragment>
 			<Breadcrumbs
-				breadCrumbTitle="Blog Details"
-				breadCrumbParent="Pages"
-				breadCrumbParent2="Blog"
+				breadCrumbTitle="Post Details"
+				breadCrumbParent="Post"
+				// breadCrumbParent2="Blog"
 				breadCrumbActive="Details"
 			/>
 			<div className="blog-wrapper">
@@ -206,7 +211,7 @@ const BlogDetails = () => {
 											<div className="d-flex align-items-center justify-content-between">
 												<div className="d-flex align-items-center">
 													<div className="d-flex align-items-center mr-1">
-														<Link to={`/blogs/edit/${data?._id}`}>
+														<Link to={`/post/edit/${data?._id}`}>
 															<PenTool
 																size={21}
 																className="text-body align-middle"
@@ -222,7 +227,7 @@ const BlogDetails = () => {
 														<Link
 															className="mr-50"
 															href="#"
-															onClick={() => deleteBlog(data?._id)}
+															onClick={() => deletePost(data?._id)}
 														>
 															<Trash
 																title="Delete"
@@ -326,4 +331,4 @@ const BlogDetails = () => {
 	);
 };
 
-export default BlogDetails;
+export default PostDetails;

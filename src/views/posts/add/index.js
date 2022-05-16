@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import '@styles/react/libs/editor/editor.scss';
 import '@styles/react/libs/react-select/_react-select.scss';
 import Breadcrumbs from '@components/breadcrumbs';
-import { addBlogUrl } from '../../../router/api-routes';
+import { addBlogUrl, addPostUrl } from '../../../router/api-routes';
 // ** Third Party Components
 import {
 	Card,
@@ -43,11 +43,11 @@ const onSubmit = (event, errors) => {
 	event.preventDefault();
 };
 
-const AddBlog = () => {
+const AddPost = () => {
 	const history = useHistory();
 	const [skin, setSkin] = useSkin();
 
-	const [newBlog, setNewBlog] = useState({
+	const [newPost, setNewPost] = useState({
 		title: '',
 		image: '',
 		published_at: '',
@@ -55,30 +55,30 @@ const AddBlog = () => {
 	});
 	const handleChangeInput = (e) => {
 		const { name, value } = e.target;
-		setNewBlog({ ...newBlog, [name]: value });
+		setNewPost({ ...newPost, [name]: value });
 	}; // ** Function to toggle tabs
-	const handleNewBlog = async () => {
-		const updatedNewBlog = {
-			...newBlog,
+	const handleNewPost = async () => {
+		const updatedNewPost = {
+			...newPost,
 			content: tinymce.activeEditor.getContent(),
 		};
 
 		// make the axios call and save the blog
 		try {
-			const { data } = await axiosClient.post(addBlogUrl, {
-				...updatedNewBlog,
+			const { data } = await axiosClient.post(addPostUrl, {
+				...updatedNewPost,
 			});
-			console.log(updatedNewBlog);
-			swal('Success', 'New Blog created successfully', 'success');
+			console.log(updatedNewPost);
+			swal('Success', 'New Post created successfully', 'success');
 
-			history.push('/blogs/list');
+			history.push('/posts/list');
 		} catch (error) {
 			console.error(error);
 		}
 	}; // ** Function to toggle tabs
 
 	const handleChangeImage = (data) => {
-		setNewBlog({ ...newBlog, image: data });
+		setNewPost({ ...newPost, image: data });
 	};
 	// ** States & Vars
 	const dispatch = useDispatch();
@@ -89,8 +89,8 @@ const AddBlog = () => {
 		<Row className="app-user-edit">
 			<Col sm="12">
 				<Breadcrumbs
-					breadCrumbTitle="Blogs"
-					breadCrumbParent="Blog Management"
+					breadCrumbTitle="Posts"
+					breadCrumbParent="Post Management"
 					breadCrumbActive="Create"
 				/>
 				<Card>
@@ -103,8 +103,7 @@ const AddBlog = () => {
 										<AvInput
 											name="title"
 											id="title"
-											placeholder="New Blog"
-											value={newBlog.title}
+											placeholder="New Post"
 											onChange={(e) => handleChangeInput(e)}
 											required
 										/>
@@ -117,18 +116,17 @@ const AddBlog = () => {
 										<EditorFullFeatured />
 									</FormGroup>
 								</Col>
-								<Col md="12">
+								{/* <Col md="12">
 									<FormGroup>
-										{/* <Label for="logo">Featured Image</Label> */}
 										<ImageUploader
 											title="Featured Image"
 											handleChangeImage={handleChangeImage}
 										/>
 									</FormGroup>
-								</Col>
+								</Col> */}
 								<Col>
-									<Button.Ripple color="primary" onClick={handleNewBlog}>
-										Create Blog
+									<Button.Ripple color="primary" onClick={handleNewPost}>
+										Create Post
 									</Button.Ripple>
 								</Col>
 							</Row>
@@ -139,4 +137,4 @@ const AddBlog = () => {
 		</Row>
 	);
 };
-export default AddBlog;
+export default AddPost;
