@@ -1,4 +1,4 @@
-const base_url = 'http://194.195.214.39';
+const base_url = 'https://inatory.com';
 const jsonServer = 'http://localhost:4000';
 
 //authentication routes
